@@ -29,6 +29,7 @@ Epicenter is a modern, reactive gym management application built with the latest
 - **Architecture**: 100% Standalone Components, Pipes, and Directives. No NgModules.
 - **State Management**: Utilizes Angular Signals for reactive and efficient state management. Singleton services (`providedIn: 'root'`) hold the application's state, and components subscribe to this state using signals.
 - **Styling**: Modern CSS with a focus on a clean, responsive, and mobile-first design. It features a dark theme, well-defined component styles, and a consistent visual language.
+- **UI Components**: Primarily uses browser-native modern CSS for a unique look and feel. It incorporates `@angular/material` for specific, feature-rich components like `MatSnackBar` to handle application-wide notifications.
 - **Control Flow**: Uses Angular's new built-in control flow (`@if`, `@for`, `@switch`) for more intuitive and performant templates.
 - **Data**: Mock data is used for all features, simulating a real backend.
 
@@ -47,20 +48,8 @@ Epicenter is a modern, reactive gym management application built with the latest
 ### Feature History
 
 - **Add Birthday to Member**: Integrated a `birthday` field into the member model, add/update forms, and mock data.
-
-### Current Task: Add Loading Indicator
-
-**Objective**: Improve user experience by showing a loading indicator and disabling form controls during member add/update operations to prevent duplicate submissions.
-
-**Steps Completed**:
-
-1.  **Create `LoadingComponent`**: Generated a reusable standalone component (`loading.component.ts`) to display a loading spinner overlay.
-2.  **Update `MemberAddComponent`**:
-    - Imported and added the `LoadingComponent` to the template.
-    - Used `@if(memberState.loading())` to conditionally display the loader.
-    - Disabled the "Save" and "Cancel" buttons while the loading state is active.
-3.  **Update `MemberUpdateComponent`**:
-    - Imported and added the `LoadingComponent` to the template.
-    - Used `@if(memberState.loading())` to conditionally display the loader.
-    - Disabled the "Update", "Delete", and "Cancel" buttons while the loading state is active.
-4.  **Verification**: Ran `ng build` to confirm the application compiles successfully.
+- **Loading Indicator**: Implemented a loading indicator for member add/update operations.
+- **Refactor Messaging to `MatSnackBar`**: Replaced the initial custom-built messaging component with Angular Material's `MatSnackBar`.
+    - Installed `@angular/material` and configured it in the application's `app.config.ts`.
+    - Replaced the custom `MessageStateService` with the `MatSnackBar` service in `MemberStateService` and `CheckInComponent`.
+    - Removed the custom `MessageComponent` and its associated service to streamline the codebase and rely on a robust, third-party library for notifications.

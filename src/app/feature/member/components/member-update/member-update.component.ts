@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, HostListener, ElementRef, input, effect } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MemberStateService } from '../../../../core/state/member-state.service';
 import { Member, Gender } from '../../../../core/models/models/member.model';
 import { GOALS } from '../../../../core/data/goals';
@@ -13,12 +13,14 @@ import { LoadingComponent } from '../../../../shared/components/loading/loading.
   styleUrls: ['./member-update.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, ReactiveFormsModule, RouterModule, LoadingComponent],
+  providers: [DatePipe],
 })
 export class MemberUpdateComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   public memberState = inject(MemberStateService);
   private eRef = inject(ElementRef);
+  private datePipe = inject(DatePipe);
 
   public id = input.required<string>();
 
@@ -48,9 +50,12 @@ export class MemberUpdateComponent {
     effect(() => {
       const foundMember = this.member();
       if (foundMember) {
+        // Convert Firestore Timestamp to JavaScript Date
+        const birthdayDate = (foundMember.birthday as any)?.toDate ? (foundMember.birthday as any).toDate() : foundMember.birthday;
+        const formattedBirthday = this.datePipe.transform(birthdayDate, 'yyyy-MM-dd') || '';
         this.memberForm.patchValue({
           ...foundMember,
-          birthday: foundMember.birthday ? new Date(foundMember.birthday).toISOString().split('T')[0] : ''
+          birthday: formattedBirthday,
         });
         this.goalInputValue.set(foundMember.goal || '');
       }
@@ -95,14 +100,6 @@ export class MemberUpdateComponent {
       };
 
       await this.memberState.updateMember(updatedMember);
-      this.router.navigate(['/members']);
-    }
-  }
-
-  async deleteMember(): Promise<void> {
-    const memberId = this.id();
-    if (memberId) {
-      await this.memberState.deleteMember(memberId);
       this.router.navigate(['/members']);
     }
   }

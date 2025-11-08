@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { MemberStateService } from '../../core/state/member-state.service';
 import { AttendanceStateService } from '../../core/state/attendance-state.service';
 import { LockerStateService } from '../../core/state/locker-state.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Member } from '../../core/models/models/member.model';
 import { FormsModule } from '@angular/forms';
 import { Attendance } from '../../core/models/models/attendance.model';
@@ -17,13 +18,14 @@ import { Attendance } from '../../core/models/models/attendance.model';
   selector: 'app-check-in',
   templateUrl: './check-in.component.html',
   styleUrls: ['./check-in.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule],
 })
 export class CheckInComponent {
   public memberStateService = inject(MemberStateService);
   public attendanceStateService = inject(AttendanceStateService);
   public lockerStateService = inject(LockerStateService);
+  private snackBar = inject(MatSnackBar);
 
   public searchTerm = signal('');
   public selectedMember = signal<Member | null>(null);
@@ -95,7 +97,12 @@ export class CheckInComponent {
         checkInTime: new Date(),
         lockerNumber: this.selectedLocker() ?? undefined,
       });
-
+      this.snackBar.open(`${member.name} checked in successfully!`, 'Close', {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'right',
+        panelClass: ['app-snackbar']
+      });
       this.resetSelection();
     }
   }
@@ -108,7 +115,13 @@ export class CheckInComponent {
       await this.attendanceStateService.updateAttendance(attendance.id, {
         checkOutTime: new Date(),
       });
-
+      const member = this.members().find((m) => m.id === memberId);
+      this.snackBar.open(`${member?.name} checked out successfully!`, 'Close', {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'right',
+        panelClass: ['app-snackbar']
+      });
       this.resetSelection();
     }
   }

@@ -28,3 +28,13 @@ body {
 .main-content {
   flex: 1;
 }
+
+.app-snackbar {
+  background-color: var(--primary-accent);
+  color: var(--primary-background);
+}
+
+.error-snackbar {
+  background-color: #f44336; /* Red for errors */
+  color: white;
+}

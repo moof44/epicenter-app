@@ -1,12 +1,14 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { Member } from '../models/models/member.model';
 import { MemberService } from './member.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MemberStateService {
   private memberService = inject(MemberService);
+  private snackBar = inject(MatSnackBar);
 
   public members = this.memberService.members;
 
@@ -35,8 +37,20 @@ export class MemberStateService {
     this._loading.set(true);
     try {
       await this.memberService.addMember(member);
+      this.snackBar.open('Member added successfully!', 'Close', { 
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'right',
+        panelClass: ['app-snackbar']
+      });
     } catch (error) {
       this._error.set(error);
+      this.snackBar.open('Failed to add member.', 'Close', {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+        verticalPosition: 'bottom',
+        horizontalPosition: 'right'
+      });
     } finally {
       this._loading.set(false);
     }
@@ -46,19 +60,20 @@ export class MemberStateService {
     this._loading.set(true);
     try {
       await this.memberService.updateMember(member);
+      this.snackBar.open('Member updated successfully!', 'Close', { 
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'right', 
+        panelClass: ['app-snackbar']
+      });
     } catch (error) {
       this._error.set(error);
-    } finally {
-      this._loading.set(false);
-    }
-  }
-
-  async deleteMember(id: string) {
-    this._loading.set(true);
-    try {
-      await this.memberService.deleteMember(id);
-    } catch (error) {
-      this._error.set(error);
+      this.snackBar.open('Failed to update member.', 'Close', {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+        verticalPosition: 'bottom',
+        horizontalPosition: 'right'
+      });
     } finally {
       this._loading.set(false);
     }

@@ -53,7 +53,6 @@
         </div>
         <div class="form-actions">
           <button type="submit" [disabled]="memberForm.invalid || memberState.loading()" class="btn btn-primary">Update Member</button>
-          <button type="button" (click)="deleteMember()" [disabled]="memberState.loading()" class="btn btn-danger">Delete Member</button>
           <div class="secondary-actions">
             <button type="button" (click)="cancel()" [disabled]="memberState.loading()" class="btn btn-secondary">Cancel</button>
           </div>
