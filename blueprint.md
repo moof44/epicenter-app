@@ -15,6 +15,10 @@ This section documents the current state of the application, including all major
 *   **Signal-based State Management:** Component state is managed using Angular Signals, providing a reactive and efficient way to handle data.
 *   **Modern CSS:** The application is styled using modern, browser-native CSS for a clean and maintainable stylesheet.
 *   **External Templates & Styles:** For larger components, the template and styles are separated into their own dedicated files to improve organization and readability.
+*   **Real-time Data & Firestore Integration:** The application uses `@angular/fire` to connect to a Firestore database for real-time data streaming.
+    *   **Timestamp to Date Conversion:** A critical architectural decision is the conversion of Firestore `Timestamp` objects to JavaScript `Date` objects. This conversion is handled within the data services (e.g., `AttendanceService`).
+    *   **Problem:** Firestore returns date fields as `Timestamp` objects, which are incompatible with Angular's `DatePipe` and can lead to runtime errors (`NG02100: InvalidPipeArgument`).
+    *   **Solution:** The data services use an RxJS `map` operator to transform the `Timestamp` objects into `Date` objects immediately after the data is retrieved from Firestore. This ensures that the rest of the application, including all components and pipes, works with standard JavaScript `Date` objects, promoting consistency and preventing bugs.
 
 #### Check-in Page
 

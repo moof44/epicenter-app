@@ -1,16 +1,19 @@
 :host {
   display: block;
-  padding: var(--spacing-xl);
+  padding: 2rem;
+  background-color: #1a1a1a;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
 }
 
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: auto;
-  gap: var(--spacing-lg);
+  grid-auto-rows: minmax(100px, auto);
+  gap: 1.5rem;
   grid-template-areas:
     "quick-actions quick-actions recent-check-ins recent-check-ins"
-    "total-members active-members checked-in available-lockers"
+    "stat-card-total-members stat-card-active-members stat-card-checked-in stat-card-available-lockers"
     "weekly-chart weekly-chart weekly-chart weekly-chart";
 }
 
@@ -18,66 +21,68 @@
   grid-area: quick-actions;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-lg);
+  gap: 1.5rem;
 }
 
 .quick-action-card {
-  background-color: var(--surface-color);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-lg);
+  background-color: #2c2c2c;
+  border-radius: 8px;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  color: var(--text-color-primary);
-  box-shadow: var(--shadow-md);
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-    background-color: var(--primary-color);
-    color: var(--text-color-light);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    background-color: #ffd700;
+    color: #1a1a1a;
   }
 
   .icon {
-    font-size: 2rem;
-    margin-bottom: var(--spacing-md);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
   }
 
   span {
-    font-weight: var(--font-weight-bold);
+    font-weight: 500;
   }
 }
 
-.stat-card-total-members { grid-area: total-members; }
-.stat-card-active-members { grid-area: active-members; }
-.stat-card-checked-in { grid-area: checked-in; }
-.stat-card-available-lockers { grid-area: available-lockers; }
+.stat-card-total-members { grid-area: stat-card-total-members; }
+.stat-card-active-members { grid-area: stat-card-active-members; }
+.stat-card-checked-in { grid-area: stat-card-checked-in; }
+.stat-card-available-lockers { grid-area: stat-card-available-lockers; }
 
 .recent-check-ins-card {
   grid-area: recent-check-ins;
-  background-color: var(--surface-color);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-lg);
-  box-shadow: var(--shadow-md);
+  background-color: #2c2c2c;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .weekly-chart-card {
   grid-area: weekly-chart;
-  background-color: var(--surface-color);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-lg);
-  box-shadow: var(--shadow-md);
+  background-color: #2c2c2c;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .card-header {
-  margin-bottom: var(--spacing-md);
+  margin-bottom: 1rem;
 
   h3 {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-bold);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.75rem;
+    color: #ffd700;
+    margin: 0;
   }
 }
 
@@ -91,8 +96,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-md) 0;
-  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 0;
+  border-bottom: 1px solid #444;
 
   &:last-child {
     border-bottom: none;
@@ -105,27 +110,57 @@
 }
 
 .member-name {
-  font-weight: var(--font-weight-bold);
+  font-weight: 500;
 }
 
 .check-in-time {
-  font-size: var(--font-size-sm);
-  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+  color: #aaa;
 }
 
 .locker-info {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: 0.5rem;
 }
 
 .locker-label {
-  font-size: var(--font-size-sm);
-  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+  color: #aaa;
 }
 
 .locker-number {
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-lg);
-  color: var(--primary-color);
+  font-weight: 500;
+  font-size: 1.25rem;
+  color: #ffd700;
+}
+
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "quick-actions quick-actions"
+      "recent-check-ins recent-check-ins"
+      "stat-card-total-members stat-card-active-members"
+      "stat-card-checked-in stat-card-available-lockers"
+      "weekly-chart weekly-chart";
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "quick-actions"
+      "recent-check-ins"
+      "stat-card-total-members"
+      "stat-card-active-members"
+      "stat-card-checked-in"
+      "stat-card-available-lockers"
+      "weekly-chart";
+  }
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
 }
