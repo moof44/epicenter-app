@@ -10,9 +10,9 @@ import { MemberStateService } from '../../core/state/member-state.service';
 import { AttendanceStateService } from '../../core/state/attendance-state.service';
 import { LockerStateService } from '../../core/state/locker-state.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Member } from '../../core/models/models/member.model';
+import { Member } from '../../core/models/member.model';
 import { FormsModule } from '@angular/forms';
-import { Attendance } from '../../core/models/models/attendance.model';
+import { Attendance } from '../../core/models/attendance.model';
 
 @Component({
   selector: 'app-check-in',

@@ -26,10 +26,10 @@
       <tbody>
         @for (member of paginatedMembers(); track member.id) {
           <tr (click)="goToUpdate(member.id)" class="member-row">
-            <td class="col-name">{{ member.name }}</td>
-            <td class="col-address hide-on-mobile">{{ member.address }}</td>
-            <td class="col-contact hide-on-tablet">{{ member.contactNumber }}</td>
-            <td class="col-goal">{{ member.goal }}</td>
+            <td data-label="Name" class="col-name">{{ member.name }}</td>
+            <td data-label="Address" class="col-address hide-on-mobile">{{ member.address }}</td>
+            <td data-label="Contact" class="col-contact hide-on-tablet">{{ member.contactNumber }}</td>
+            <td data-label="Goal" class="col-goal">{{ member.goal }}</td>
           </tr>
         }
       </tbody>

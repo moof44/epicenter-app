@@ -12,7 +12,7 @@ import {
   Timestamp,
 } from '@angular/fire/firestore';
 import { from, Observable, map } from 'rxjs';
-import { Attendance } from '../models/models/attendance.model';
+import { Attendance } from '../models/attendance.model';
 
 @Injectable({
   providedIn: 'root',

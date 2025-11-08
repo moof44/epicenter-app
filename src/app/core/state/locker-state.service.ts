@@ -1,7 +1,7 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { Locker } from '../models/models/locker.model';
+import { Locker } from '../models/locker.model';
 import { LOCKER_MOCK } from '../mock/locker.mock';
-import { Gender } from '../models/models/member.model';
+import { Gender } from '../models/member.model';
 import { AttendanceStateService } from './attendance-state.service';
 
 @Injectable({

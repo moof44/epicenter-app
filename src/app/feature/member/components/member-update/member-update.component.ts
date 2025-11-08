@@ -3,8 +3,8 @@ import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MemberStateService } from '../../../../core/state/member-state.service';
-import { Member, Gender } from '../../../../core/models/models/member.model';
-import { GOALS } from '../../../../core/data/goals';
+import { Member, Gender } from '../../../../core/models/member.model';
+import { GOALS } from '../../data/goals';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 
 @Component({
@@ -41,7 +41,7 @@ export class MemberUpdateComponent {
   public goalInputValue = signal<string>('');
   public isDropdownVisible = signal<boolean>(false);
   public filteredGoals = computed(() =>
-    GOALS.filter((goal) =>
+    GOALS.filter((goal: string) =>
       goal.toLowerCase().includes(this.goalInputValue().toLowerCase())
     )
   );

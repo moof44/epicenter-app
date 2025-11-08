@@ -5,7 +5,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { Chart, ChartConfiguration, ChartOptions, ChartType, registerables } from 'chart.js';
 import { AttendanceStateService } from '../../../../core/state/attendance-state.service';
 import { eachDayOfInterval, endOfWeek, format, startOfWeek } from 'date-fns';
-import { Attendance } from '../../../../core/models/models/attendance.model';
+import { Attendance } from '../../../../core/models/attendance.model';
 
 @Component({
   selector: 'app-weekly-active-members-chart',

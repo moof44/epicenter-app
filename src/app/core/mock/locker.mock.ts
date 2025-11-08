@@ -1,5 +1,5 @@
-import { Locker } from '../models/models/locker.model';
-import { Gender } from '../models/models/member.model';
+import { Locker } from '../models/locker.model';
+import { Gender } from '../models/member.model';
 
 export const LOCKER_MOCK: Locker[] = [
   // Male Lockers

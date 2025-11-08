@@ -12,6 +12,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  gap: 1rem;
 }
 
 .list-title {
@@ -163,7 +164,6 @@
   .list-header {
     flex-direction: column;
     align-items: stretch;
-    gap: 1rem;
   }
 
   .add-member-button {
@@ -203,5 +203,51 @@
 
   .pagination-controls button:last-of-type {
     order: 2;
+  }
+
+  .member-table {
+    display: block;
+    width: 100%;
+  }
+
+  .member-table thead, .member-table tbody, .member-table tr {
+    display: block;
+  }
+
+  .member-table thead {
+    display: none;
+  }
+
+  .member-table tr {
+    border: 1px solid var(--borders-dividers);
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+  }
+
+  .member-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: none;
+    white-space: normal;
+    text-align: right;
+  }
+
+  .member-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    text-align: left;
+    margin-right: 1rem;
+    color: var(--primary-accent);
+  }
+
+  .member-table .col-name {
+    width: 100%;
+  }
+
+  .member-table .col-goal {
+    width: 100%;
   }
 }

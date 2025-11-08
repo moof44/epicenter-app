@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { Member } from '../models/models/member.model';
+import { Member } from '../models/member.model';
 import { MemberService } from './member.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
