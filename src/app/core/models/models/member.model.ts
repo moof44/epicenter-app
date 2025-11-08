@@ -13,4 +13,5 @@ export interface Member {
   goal: string;
   membershipStatus: MembershipStatus;
   gender: Gender;
+  birthday?: Date;
 }

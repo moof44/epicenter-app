@@ -27,6 +27,7 @@ export class MemberUpdateComponent {
     address: ['', Validators.required],
     goal: ['', Validators.required],
     gender: ['', Validators.required],
+    birthday: [''],
   });
 
   private member = computed(() => {
@@ -46,7 +47,10 @@ export class MemberUpdateComponent {
     effect(() => {
       const foundMember = this.member();
       if (foundMember) {
-        this.memberForm.patchValue(foundMember);
+        this.memberForm.patchValue({
+          ...foundMember,
+          birthday: foundMember.birthday ? new Date(foundMember.birthday).toISOString().split('T')[0] : ''
+        });
         this.goalInputValue.set(foundMember.goal || '');
       }
     });
@@ -86,6 +90,7 @@ export class MemberUpdateComponent {
         contactNumber: formValue.contactNumber!,
         goal: formValue.goal!,
         gender: formValue.gender! as Gender,
+        birthday: formValue.birthday ? new Date(formValue.birthday) : undefined,
       };
 
       await this.memberState.updateMember(updatedMember);
