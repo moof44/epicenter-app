@@ -1,33 +1,37 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { Locker } from '../models/models/locker.model';
 import { LOCKER_MOCK } from '../mock/locker.mock';
 import { Gender } from '../models/models/member.model';
+import { AttendanceStateService } from './attendance-state.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LockerStateService {
-  public readonly lockers = signal<Locker[]>(LOCKER_MOCK);
+  private readonly attendanceStateService = inject(AttendanceStateService);
+  public readonly allLockers = signal<Locker[]>(LOCKER_MOCK, { equal: () => false });
 
-  public readonly availableLockers = computed(() => this.lockers().filter((locker) => locker.isAvailable));
+  private readonly occupiedLockerNumbers = computed(() => {
+    return this.attendanceStateService
+      .attendances()
+      .filter((a) => !a.checkOutTime && a.lockerNumber)
+      .map((a) => {
+        return String(a.lockerNumber)
+      });
+  });
+
+  public readonly availableLockers = computed(() => {
+    const occupiedNumbers = this.occupiedLockerNumbers();
+    const available = this.allLockers().filter(
+      (locker) => !occupiedNumbers.includes(locker.id)
+    );
+    return available;
+  });
 
   public getAvailableLockersByGender(gender: Gender) {
-    return computed(() => this.lockers().filter((locker) => locker.isAvailable && locker.gender === gender));
-  }
-
-  public takeLocker(lockerNumber: number): void {
-    this.lockers.update((lockers) =>
-      lockers.map((locker) =>
-        locker.number === lockerNumber ? { ...locker, isAvailable: false } : locker
-      )
-    );
-  }
-
-  public releaseLocker(lockerNumber: number): void {
-    this.lockers.update((lockers) =>
-      lockers.map((locker) =>
-        locker.number === lockerNumber ? { ...locker, isAvailable: true } : locker
-      )
-    );
+    return computed(() => {
+      const available = this.availableLockers();
+      return available.filter((locker) => locker.gender === gender);
+    });
   }
 }

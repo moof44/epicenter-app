@@ -58,13 +58,7 @@ export class CheckInComponent {
     });
   });
 
-  public availableLockers = computed(() => {
-    const member = this.selectedMember();
-    if (member) {
-      return this.lockerStateService.getAvailableLockersByGender(member.gender)();
-    }
-    return [];
-  });
+  public availableLockers = this.lockerStateService.availableLockers;
 
   public memberAttendanceHistory = computed(() => {
     const member = this.selectedMember();
@@ -102,10 +96,6 @@ export class CheckInComponent {
         lockerNumber: this.selectedLocker() ?? undefined,
       });
 
-      if (this.selectedLocker()) {
-        this.lockerStateService.takeLocker(this.selectedLocker()!);
-      }
-
       this.resetSelection();
     }
   }
@@ -119,9 +109,6 @@ export class CheckInComponent {
         checkOutTime: new Date(),
       });
 
-      if (attendance.lockerNumber) {
-        this.lockerStateService.releaseLocker(attendance.lockerNumber);
-      }
       this.resetSelection();
     }
   }
