@@ -1,0 +1,59 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.member-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.list-panel {
+  width: 300px;
+  border-right: 1px solid #eee;
+  overflow-y: auto;
+}
+
+.detail-panel {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.member-detail {
+  text-align: center;
+}
+
+.member-photo-large {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.member-name {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.member-role {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.member-description {
+  font-size: 1rem;
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.no-member-selected {
+  text-align: center;
+  color: #777;
+}

@@ -1,0 +1,81 @@
+@use "../../variables";
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--primary-background);
+  font-family: 'Roboto', sans-serif;
+}
+
+.login-card {
+  background: var(--secondary-background);
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px var(--box-shadow);
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+  border: 1px solid var(--borders-dividers);
+}
+
+.login-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem;
+  color: var(--primary-accent);
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--secondary-text);
+  font-size: 1rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--borders-dividers);
+  background-color: var(--ui-background-light);
+  color: var(--primary-text);
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 3px var(--primary-accent-alpha);
+}
+
+.login-button {
+  background-color: var(--primary-accent);
+  color: var(--primary-background);
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.login-button:hover {
+  background-color: var(--primary-accent-hover);
+}

@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Use viewport height to ensure it fills the screen */
+}
+
+app-toolbar {
+  flex-shrink: 0; /* Prevent the toolbar from shrinking */
+}
+
+main {
+  flex-grow: 1; /* Allow the main content to grow and fill available space */
+  overflow-y: auto; /* Add scroll for content that overflows */
+  display: block;
+  height: 100%;
+}
+

@@ -1,0 +1,56 @@
+<div class="check-in-container">
+  <div class="check-in-box">
+    <h2>Member Check-in</h2>
+
+    @if (!selectedMember()) {
+      <p>Search for a member to check them in or out.</p>
+      <mat-form-field appearance="fill">
+        <mat-label>Search for a member</mat-label>
+        <input 
+          matInput 
+          [value]="searchTerm()" 
+          (input)="onSearchTermChange($event.target.value)" 
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete #auto="matAutocomplete">
+          @for (member of filteredMembers(); track member.id) {
+            <mat-option [value]="member.name" (onSelectionChange)="onMemberSelected(member)">
+              {{ member.name }}
+            </mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+    } @else {
+      <div class="member-details">
+        <h3>{{ selectedMember()?.name }}</h3>
+        <p>{{ selectedMember()?.emailAddress }}</p>
+
+        @if (!isAlreadyCheckedIn()) {
+          <div class="check-in-actions">
+            <mat-slide-toggle [checked]="wantsLocker()" (change)="wantsLocker.set($event.checked)">
+              Assign Locker
+            </mat-slide-toggle>
+
+            @if (showLockerOptions()) {
+              <mat-form-field appearance="fill">
+                <mat-label>Available Lockers</mat-label>
+                <mat-select [value]="selectedLocker()" (valueChange)="selectedLocker.set($event)">
+                  @for (locker of availableLockers(); track locker.id) {
+                    <mat-option [value]="locker.number">Locker {{ locker.number }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
+
+            <button mat-raised-button color="primary" (click)="onCheckIn()">Check-in</button>
+          </div>
+        } @else {
+          <div class="check-out-actions">
+            <p>This member is already checked in.</p>
+            <button mat-raised-button color="warn" (click)="onCheckOut()">Check-out</button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

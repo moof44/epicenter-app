@@ -1,0 +1,46 @@
+<div class="member-list-container">
+  <div class="list-header">
+    <h2 class="list-title">All Members</h2>
+    <a routerLink="/members/add" class="add-member-button">Add Member</a>
+  </div>
+
+  <div class="search-container">
+    <input
+      type="text"
+      placeholder="Search by name, contact, or goal..."
+      class="search-input"
+      (input)="onSearch($event)"
+    />
+  </div>
+
+  @if (paginatedMembers().length > 0) {
+    <table class="member-table">
+      <thead>
+        <tr>
+          <th class="col-name">Name</th>
+          <th class="col-address hide-on-mobile">Address</th>
+          <th class="col-contact hide-on-tablet">Contact Number</th>
+          <th class="col-goal">Goal</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (member of paginatedMembers(); track member.id) {
+          <tr (click)="goToUpdate(member.id)" class="member-row">
+            <td class="col-name">{{ member.name }}</td>
+            <td class="col-address hide-on-mobile">{{ member.address }}</td>
+            <td class="col-contact hide-on-tablet">{{ member.contactNumber }}</td>
+            <td class="col-goal">{{ member.goal }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <div class="no-results">No members found.</div>
+  }
+
+  <div class="pagination-controls">
+    <button (click)="previousPage()" [disabled]="currentPage() === 1">Previous</button>
+    <span>Page {{ currentPage() }} of {{ totalPages() }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage() === totalPages()">Next</button>
+  </div>
+</div>

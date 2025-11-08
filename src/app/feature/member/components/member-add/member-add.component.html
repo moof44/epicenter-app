@@ -1,0 +1,55 @@
+<div class="add-member-container">
+  <div class="add-member-card">
+    <h2 class="form-title">Add New Member</h2>
+    <form [formGroup]="memberForm" (ngSubmit)="saveMember()" class="member-form">
+      <div class="form-field">
+        <label for="name">Name</label>
+        <input id="name" formControlName="name" placeholder="e.g., Jane Doe" />
+        @if (memberForm.get('name')?.invalid && (memberForm.get('name')?.dirty || memberForm.get('name')?.touched)) {
+          <div class="error-message">Name is required.</div>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="contactNumber">Contact Number</label>
+        <input id="contactNumber" formControlName="contactNumber" placeholder="e.g., 555-123-4567" />
+        @if (memberForm.get('contactNumber')?.invalid && (memberForm.get('contactNumber')?.dirty || memberForm.get('contactNumber')?.touched)) {
+          <div class="error-message">Contact number is required.</div>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="address">Address</label>
+        <input id="address" formControlName="address" placeholder="e.g., 123 Fitness St, Workout City" />
+        @if (memberForm.get('address')?.invalid && (memberForm.get('address')?.dirty || memberForm.get('address')?.touched)) {
+          <div class="error-message">Address is required.</div>
+        }
+      </div>
+
+      <div class="form-field autocomplete-container">
+        <label for="goal">Fitness Goal</label>
+        <input
+          id="goal"
+          formControlName="goal"
+          placeholder="e.g., Build muscle"
+          (input)="onGoalInput($event)"
+        />
+        @if (isDropdownVisible() && filteredGoals().length > 0) {
+          <ul class="autocomplete-list">
+            @for (goal of filteredGoals(); track goal) {
+              <li (click)="selectGoal(goal)">{{ goal }}</li>
+            }
+          </ul>
+        }
+        @if (memberForm.get('goal')?.invalid && (memberForm.get('goal')?.dirty || memberForm.get('goal')?.touched)) {
+          <div class="error-message">Fitness goal is required.</div>
+        }
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="memberForm.invalid" class="save-button">Save Member</button>
+        <button type="button" (click)="cancel()" class="cancel-button">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

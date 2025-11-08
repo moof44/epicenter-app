@@ -1,0 +1,23 @@
+<mat-toolbar class="black-toolbar">
+  <a routerLink="/dashboard" class="logo-container">
+    <img ngSrc="/assets/images/logo.png" priority width="65" height="65" alt="Epicenter Fitness Gym logo">
+    <span class="toolbar-title">Epicenter Fitness</span>
+  </a>
+  <span class="spacer"></span>
+
+  <div class="nav-links">
+    <a mat-button routerLink="/check-in">Check-in</a>
+    <a mat-button routerLink="/attendance">Attendance</a>
+    <a mat-button routerLink="/members">Members</a>
+  </div>
+
+  <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <a mat-menu-item routerLink="/check-in">Check-in</a>
+    <a mat-menu-item routerLink="/attendance">Attendance</a>
+    <a mat-menu-item routerLink="/members">Members</a>
+  </mat-menu>
+</mat-toolbar>

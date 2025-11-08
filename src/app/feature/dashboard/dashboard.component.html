@@ -1,0 +1,29 @@
+<div class="quick-actions">
+  <button routerLink="/members/add">
+    <span class="icon">&#43;</span>
+    Add New Member
+  </button>
+  <button routerLink="/attendance">
+    <span class="icon">&#128196;</span>
+    View Attendance
+  </button>
+</div>
+
+<div class="dashboard-container">
+  <div class="stat-card">
+    <h3>Total Members</h3>
+    <p>{{ totalMembers() }}</p>
+  </div>
+  <div class="stat-card">
+    <h3>Members Checked In</h3>
+    <p>{{ checkedInCount() }}</p>
+  </div>
+  <div class="stat-card">
+    <h3>Available Lockers</h3>
+    <p>{{ availableLockers() }} / {{ totalLockers() }}</p>
+  </div>
+</div>
+<div class="chart-section">
+  <h3>Weekly Active Members</h3>
+  <app-weekly-active-members-chart></app-weekly-active-members-chart>
+</div>
