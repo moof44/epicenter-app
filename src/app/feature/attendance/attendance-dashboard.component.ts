@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AttendanceStateService } from '../../core/services/attendance-state.service';
-import { MemberStateService } from '../../services/member-state.service';
+import { AttendanceStateService } from '../../core/state/attendance-state.service';
+import { MemberStateService } from '../../core/state/member-state.service';
 
 @Component({
   selector: 'app-attendance-dashboard',
-  standalone: true,
   template: `
     <div class="attendance-container">
       <div class="list-header">
@@ -15,7 +14,7 @@ import { MemberStateService } from '../../services/member-state.service';
       <div class="dashboard-card">
         <h3 class="card-title">Currently Checked-in</h3>
         <ul class="attendance-list">
-          @for (attendance of attendanceStateService.attendance(); track attendance.id) {
+          @for (attendance of attendanceStateService.attendances(); track attendance.id) {
             @if (!attendance.checkOutTime) {
               <li class="attendance-list-item">
                 <span>{{ getMemberName(attendance.memberId)() }}</span>
@@ -32,7 +31,7 @@ import { MemberStateService } from '../../services/member-state.service';
       <div class="dashboard-card">
         <h3 class="card-title">Today's History</h3>
         <ul class="attendance-list">
-          @for (attendance of attendanceStateService.attendance(); track attendance.id) {
+          @for (attendance of attendanceStateService.attendances(); track attendance.id) {
             @if (attendance.checkOutTime) {
               <li class="attendance-list-item">
                 <span>{{ getMemberName(attendance.memberId)() }}</span>
@@ -108,7 +107,7 @@ export class AttendanceDashboardComponent {
 
   getMemberName(memberId: string) {
     return computed(() => {
-        const member = this.memberStateService.getMemberById(memberId)();
+        const member = this.memberStateService.members().find(m => m.id === memberId);
         return member ? member.name : 'Unknown Member';
     });
   }

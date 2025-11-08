@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MemberStateService } from '@app/core/services/member-state.service';
+import { MemberStateService } from '../../../../core/state/member-state.service';
 import { Router, RouterModule } from '@angular/router';
-import { Member } from '@app/core/models/member.model';
+import { Member } from '../../../../core/models/models/member.model';
 
 @Component({
   selector: 'app-member-list',

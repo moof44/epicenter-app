@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal, HostListe
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MemberStateService } from '@app/core/services/member-state.service';
-import { Member } from '@app/core/models/member.model';
-import { GOALS } from '@feature/member/data/goals';
+import { MemberStateService } from '../../../../core/state/member-state.service';
+import { Member, Gender } from '../../../../core/models/models/member.model';
+import { GOALS } from '../../../../core/data/goals';
 
 @Component({
   selector: 'app-member-update',
@@ -25,6 +25,7 @@ export class MemberUpdateComponent {
     contactNumber: ['', Validators.required],
     address: ['', Validators.required],
     goal: ['', Validators.required],
+    gender: ['', Validators.required],
   });
 
   public goalInputValue = signal<string>('');
@@ -82,6 +83,7 @@ export class MemberUpdateComponent {
         address: formValue.address!,
         contactNumber: formValue.contactNumber!,
         goal: formValue.goal!,
+        gender: formValue.gender! as Gender,
       };
 
       this.memberState.updateMember(updatedMember);

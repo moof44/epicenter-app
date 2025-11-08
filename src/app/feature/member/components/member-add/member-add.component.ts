@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, HostListener, ElementRef } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MemberStateService } from '@app/core/services/member-state.service';
-import { GOALS } from '@feature/member/data/goals';
-import { Member } from '@app/core/models/member.model';
+import { MemberStateService } from '../../../../core/state/member-state.service';
+import { GOALS } from '../../../../core/data/goals';
+import { Member, Gender } from '../../../../core/models/models/member.model';
 
 @Component({
   selector: 'app-member-add',
@@ -23,12 +23,13 @@ export class MemberAddComponent {
     contactNumber: ['', Validators.required],
     address: ['', Validators.required],
     goal: ['', Validators.required],
+    gender: ['', Validators.required],
   });
 
   public goalInputValue = signal<string>('');
   public isDropdownVisible = signal<boolean>(false);
   public filteredGoals = computed(() =>
-    GOALS.filter((goal) =>
+    GOALS.filter((goal: string) =>
       goal.toLowerCase().includes(this.goalInputValue().toLowerCase())
     )
   );
@@ -61,6 +62,7 @@ export class MemberAddComponent {
         address: formValue.address!,
         contactNumber: formValue.contactNumber!,
         goal: formValue.goal!,
+        gender: formValue.gender! as Gender,
         membershipStatus: 'Active',
       };
       this.memberState.addMember(newMember);

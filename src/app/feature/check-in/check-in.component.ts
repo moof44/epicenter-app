@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MemberStateService } from '../../services/member-state.service';
-import { AttendanceStateService } from '../../core/services/attendance-state.service';
-import { LockerStateService } from '../../core/services/locker-state.service';
-import { Member } from '../../core/models/member.model';
+import { MemberStateService } from '../../core/state/member-state.service';
+import { AttendanceStateService } from '../../core/state/attendance-state.service';
+import { LockerStateService } from '../../core/state/locker-state.service';
+import { Member } from '../../core/models/models/member.model';
 import { FormsModule } from '@angular/forms';
+import { computed } from '@angular/core';
+import { Attendance } from '../../core/models/models/attendance.model';
 
 @Component({
   selector: 'app-check-in',
@@ -19,8 +21,8 @@ import { FormsModule } from '@angular/forms';
           type="text"
           placeholder="Search for a member..."
           class="search-input"
-          [(ngModel)]="searchTerm"
-          (ngModelChange)="searchMembers()"
+          [value]="searchTerm()"
+          (input)="searchTerm.set($event.target.value)"
         />
       </div>
 
@@ -34,16 +36,16 @@ import { FormsModule } from '@angular/forms';
 
       @if (selectedMember(); as member) {
         <div class="member-details">
-          <h2 class="details-title">Selected Member: {{ member.name }}</h2>
+          <h2 class="details-title">Selected Member: {{ member.name }} ({{member.gender}})</h2>
           @if (!isMemberCheckedIn(member.id)) {
             <div class="locker-assignment">
               <label for="locker">Assign Locker?</label>
-              <input type="checkbox" id="locker" [(ngModel)]="assignLocker" />
+              <input type="checkbox" id="locker" [checked]="assignLocker()" (change)="assignLocker.set($event.target.checked)" />
             </div>
 
-            @if (assignLocker) {
-              <select [(ngModel)]="selectedLocker" class="locker-select">
-                @for (locker of lockerStateService.getAvailableLockers(); track locker.id) {
+            @if (assignLocker()) {
+              <select [ngModel]="selectedLocker()" (ngModelChange)="selectedLocker.set($event)" class="locker-select">
+                @for (locker of availableLockers(); track locker.id) {
                   <option [value]="locker.number">Locker {{ locker.number }}</option>
                 }
               </select>
@@ -175,64 +177,79 @@ export class CheckInComponent {
   public attendanceStateService = inject(AttendanceStateService);
   public lockerStateService = inject(LockerStateService);
 
-  public searchTerm = '';
+  public searchTerm = signal('');
   public filteredMembers = signal<Member[]>([]);
   public selectedMember = signal<Member | null>(null);
-  public assignLocker = false;
-  public selectedLocker: number | null = null;
+  public assignLocker = signal(false);
+  public selectedLocker = signal<number | null>(null);
 
-  searchMembers(): void {
-    if (this.searchTerm) {
-      const members = this.memberStateService.members().filter((m: Member) => m.name.toLowerCase().includes(this.searchTerm.toLowerCase()));
-      this.filteredMembers.set(members);
-    } else {
-      this.filteredMembers.set([]);
+  private members = computed(() => this.memberStateService.members());
+  public availableLockers = computed(() => {
+    const member = this.selectedMember();
+    if (member) {
+      return this.lockerStateService.getAvailableLockersByGender(member.gender)();
     }
+    return [];
+  });
+
+  constructor() {
+    computed(() => {
+      const term = this.searchTerm();
+      if (term) {
+        const lowercasedTerm = term.toLowerCase();
+        const filtered = this.members().filter((m: Member) => m.name.toLowerCase().includes(lowercasedTerm));
+        this.filteredMembers.set(filtered);
+      } else {
+        this.filteredMembers.set([]);
+      }
+    });
   }
 
   selectMember(member: Member): void {
     this.selectedMember.set(member);
-    this.searchTerm = '';
+    this.searchTerm.set('');
     this.filteredMembers.set([]);
   }
 
   isMemberCheckedIn(memberId: string): boolean {
-    return this.attendanceStateService.attendance().some(a => a.memberId === memberId && !a.checkOutTime);
+    return this.attendanceStateService.attendances().some((a: Attendance) => a.memberId === memberId && !a.checkOutTime);
   }
 
   checkIn(): void {
     const member = this.selectedMember();
     if (member) {
       this.attendanceStateService.addAttendance({
-        id: Date.now().toString(),
         memberId: member.id,
         checkInTime: new Date(),
-        lockerNumber: this.selectedLocker ?? undefined,
+        lockerNumber: this.selectedLocker() ?? undefined,
       });
-      if(this.selectedLocker) {
-        this.lockerStateService.takeLocker(this.selectedLocker)
+
+      if(this.selectedLocker()) {
+        this.lockerStateService.takeLocker(this.selectedLocker()!)
       }
-      this.selectedMember.set(null);
-      this.selectedLocker = null;
-      this.assignLocker = false;
+
+      this.resetSelection();
     }
   }
 
   checkOut(): void {
     const member = this.selectedMember();
     if (member) {
-      const attendance = this.attendanceStateService.attendance().find(a => a.memberId === member.id && !a.checkOutTime);
+      const attendance = this.attendanceStateService.attendances().find((a: Attendance) => a.memberId === member.id && !a.checkOutTime);
       if (attendance) {
-        this.attendanceStateService.attendance.update(attendances =>
-          attendances.map(a =>
-            a.id === attendance.id ? { ...a, checkOutTime: new Date() } : a
-          )
-        );
+        this.attendanceStateService.updateAttendance(attendance.id, { checkOutTime: new Date() });
+
         if (attendance.lockerNumber) {
           this.lockerStateService.releaseLocker(attendance.lockerNumber);
         }
-        this.selectedMember.set(null);
+        this.resetSelection();
       }
     }
+  }
+
+  private resetSelection(): void {
+    this.selectedMember.set(null);
+    this.selectedLocker.set(null);
+    this.assignLocker.set(false);
   }
 }

@@ -10,7 +10,7 @@ import {
   deleteDoc,
   DocumentReference,
 } from '@angular/fire/firestore';
-import { Member } from '../models/member.model';
+import { Member } from '../models/models/member.model';
 import { Observable, tap } from 'rxjs';
 
 @Injectable({

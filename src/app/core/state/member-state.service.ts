@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, inject, effect } from '@angular/core';
-import { Member } from '../models/member.model';
+import { Member } from '../models/models/member.model';
 import { MemberService } from './member.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, Subject } from 'rxjs';

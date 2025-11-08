@@ -46,6 +46,21 @@
         }
       </div>
 
+      <div class="form-field">
+        <label>Gender</label>
+        <div class="gender-options">
+          <label>
+            <input type="radio" formControlName="gender" value="Male"> Male
+          </label>
+          <label>
+            <input type="radio" formControlName="gender" value="Female"> Female
+          </label>
+        </div>
+        @if (memberForm.get('gender')?.invalid && (memberForm.get('gender')?.dirty || memberForm.get('gender')?.touched)) {
+          <div class="error-message">Gender is required.</div>
+        }
+      </div>
+
       <div class="form-actions">
         <button type="submit" [disabled]="memberForm.invalid" class="save-button">Save Member</button>
         <button type="button" (click)="cancel()" class="cancel-button">Cancel</button>
