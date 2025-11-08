@@ -4,3 +4,6 @@
 <main>
   <router-outlet></router-outlet>
 </main>
+@if(layoutService.loading()) {
+  <app-loading />
+}
