@@ -1,56 +1,94 @@
-<div class="check-in-container">
-  <div class="check-in-box">
-    <h2>Member Check-in</h2>
+<div class="page-container">
+      <div class="check-in-container">
+        <div class="list-header">
+          <h2 class="list-title">Member Check-in</h2>
+        </div>
 
-    @if (!selectedMember()) {
-      <p>Search for a member to check them in or out.</p>
-      <mat-form-field appearance="fill">
-        <mat-label>Search for a member</mat-label>
-        <input 
-          matInput 
-          [value]="searchTerm()" 
-          (input)="onSearchTermChange($event.target.value)" 
-          [matAutocomplete]="auto"
-        />
-        <mat-autocomplete #auto="matAutocomplete">
-          @for (member of filteredMembers(); track member.id) {
-            <mat-option [value]="member.name" (onSelectionChange)="onMemberSelected(member)">
-              {{ member.name }}
-            </mat-option>
-          }
-        </mat-autocomplete>
-      </mat-form-field>
-    } @else {
-      <div class="member-details">
-        <h3>{{ selectedMember()?.name }}</h3>
-        <p>{{ selectedMember()?.emailAddress }}</p>
+        <div class="search-container">
+          <input
+            type="text"
+            placeholder="Search for a member..."
+            class="search-input"
+            [value]="searchTerm()"
+            (input)="handleSearchInput($event)"
+          />
+        </div>
 
-        @if (!isAlreadyCheckedIn()) {
-          <div class="check-in-actions">
-            <mat-slide-toggle [checked]="wantsLocker()" (change)="wantsLocker.set($event.checked)">
-              Assign Locker
-            </mat-slide-toggle>
-
-            @if (showLockerOptions()) {
-              <mat-form-field appearance="fill">
-                <mat-label>Available Lockers</mat-label>
-                <mat-select [value]="selectedLocker()" (valueChange)="selectedLocker.set($event)">
-                  @for (locker of availableLockers(); track locker.id) {
-                    <mat-option [value]="locker.number">Locker {{ locker.number }}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
+        @if (filteredMembers().length > 0) {
+          <ul class="member-list">
+            @for (member of filteredMembers(); track member.id) {
+              <li (click)="selectMember(member)" class="member-list-item">{{ member.name }}</li>
             }
+          </ul>
+        }
 
-            <button mat-raised-button color="primary" (click)="onCheckIn()">Check-in</button>
+        @if (selectedMember(); as member) {
+          <div class="member-details">
+            <h2 class="details-title">Selected Member: {{ member.name }} ({{member.gender}})</h2>
+            @if (!isMemberCheckedIn(member.id)) {
+              <div class="locker-assignment">
+                <label for="locker">Assign Locker?</label>
+                <input type="checkbox" id="locker" [checked]="assignLocker()" (change)="handleLockerChange($event)" />
+              </div>
+
+              @if (assignLocker()) {
+                <select [ngModel]="selectedLocker()" (ngModelChange)="selectedLocker.set($event)" class="locker-select">
+                  @for (locker of availableLockers(); track locker.id) {
+                    <option [value]="locker.number">Locker {{ locker.number }}</option>
+                  }
+                </select>
+              }
+
+              <button (click)="checkIn()" class="check-in-button">Check-in</button>
+            } @else {
+              <button (click)="checkOut(member.id)" class="check-out-button">Check-out</button>
+            }
           </div>
-        } @else {
-          <div class="check-out-actions">
-            <p>This member is already checked in.</p>
-            <button mat-raised-button color="warn" (click)="onCheckOut()">Check-out</button>
+          
+          <div class="attendance-history">
+            <h3 class="history-title">Attendance History</h3>
+            @if(memberAttendanceHistory().length > 0) {
+              <ul class="history-list">
+                  @for(attendance of memberAttendanceHistory(); track attendance.id) {
+                      <li class="history-list-item">
+                          <span>Check-in: {{ attendance.checkInTime | date:'short' }}</span>
+                          @if(attendance.checkOutTime) {
+                              <span>Check-out: {{ attendance.checkOutTime | date:'short' }}</span>
+                          }
+                          @if(attendance.lockerNumber) {
+                              <span>Locker: {{ attendance.lockerNumber }}</span>
+                          }
+                      </li>
+                  }
+              </ul>
+            } @else {
+              <p>No attendance history for this member.</p>
+            }
           </div>
         }
       </div>
-    }
-  </div>
-</div>
+
+      <div class="checked-in-container">
+        <div class="list-header">
+          <h2 class="list-title">Currently Checked-in</h2>
+        </div>
+        @if (checkedInMembers().length > 0) {
+          <ul class="checked-in-list">
+            @for (item of checkedInMembers(); track item.id) {
+              <li class="checked-in-list-item">
+                <div>
+                  <p class="member-name">{{ item.memberName }}</p>
+                  <p class="check-in-time">Checked-in: {{ item.checkInTime | date:'shortTime' }}</p>
+                  @if(item.lockerNumber) {
+                    <p class="locker-number">Locker: {{ item.lockerNumber }}</p>
+                  }
+                </div>
+                <button (click)="checkOut(item.memberId)" class="check-out-button-small">Check-out</button>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p>No members are currently checked in.</p>
+        }
+      </div>
+    </div>

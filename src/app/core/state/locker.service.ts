@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
-import { Locker } from '../models/locker.model';
-import { LOCKER_MOCK } from '../models/locker.mock';
+import { Locker } from '../models/models/locker.model';
+import { LOCKER_MOCK } from '../mock/locker.mock';
 
 @Injectable({
   providedIn: 'root'

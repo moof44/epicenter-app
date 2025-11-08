@@ -3,8 +3,9 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { Chart, ChartConfiguration, ChartOptions, ChartType, registerables } from 'chart.js';
-import { AttendanceStateService } from '../../../../core/services/attendance-state.service';
+import { AttendanceStateService } from '../../../../core/state/attendance-state.service';
 import { eachDayOfInterval, endOfWeek, format, startOfWeek } from 'date-fns';
+import { Attendance } from '../../../../core/models/models/attendance.model';
 
 @Component({
   selector: 'app-weekly-active-members-chart',
@@ -23,7 +24,7 @@ export class WeeklyActiveMembersChartComponent {
     const weekDays = eachDayOfInterval({ start, end });
 
     return weekDays.map(day => {
-      return this.attendanceState.attendance().filter(a => {
+      return this.attendanceState.attendances().filter((a: Attendance) => {
         const checkInDate = new Date(a.checkInTime);
         return format(checkInDate, 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd');
       }).length;

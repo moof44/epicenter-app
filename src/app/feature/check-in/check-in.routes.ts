@@ -4,6 +4,6 @@ import { CheckInComponent } from './check-in.component';
 export const CHECK_IN_ROUTES: Routes = [
   {
     path: '',
-    component: CheckInComponent
-  }
+    component: CheckInComponent,
+  },
 ];

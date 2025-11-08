@@ -1,29 +1,68 @@
-<div class="quick-actions">
-  <button routerLink="/members/add">
-    <span class="icon">&#43;</span>
-    Add New Member
-  </button>
-  <button routerLink="/attendance">
-    <span class="icon">&#128196;</span>
-    View Attendance
-  </button>
-</div>
+<div class="dashboard-grid">
 
-<div class="dashboard-container">
-  <div class="stat-card">
-    <h3>Total Members</h3>
-    <p>{{ totalMembers() }}</p>
+  <div class="quick-actions">
+    <a routerLink="/members/add" class="quick-action-card add-member">
+      <span class="icon">&#43;</span>
+      <span>Add New Member</span>
+    </a>
+    <a routerLink="/attendance" class="quick-action-card view-attendance">
+      <span class="icon">&#128196;</span>
+      <span>View Attendance</span>
+    </a>
   </div>
-  <div class="stat-card">
-    <h3>Members Checked In</h3>
-    <p>{{ checkedInCount() }}</p>
+
+  <app-stat-card
+    class="stat-card-total-members"
+    title="Total Members"
+    [value]="dashboardState.totalMembers()"
+    icon="groups"
+  />
+
+  <app-stat-card
+    class="stat-card-active-members"
+    title="Active Members"
+    [value]="dashboardState.activeMembers()"
+    icon="directions_run"
+  />
+
+  <app-stat-card
+    class="stat-card-checked-in"
+    title="Currently Checked In"
+    [value]="dashboardState.checkedInCount()"
+    icon="where_to_vote"
+  />
+
+  <app-stat-card
+    class="stat-card-available-lockers"
+    title="Available Lockers"
+    [value]="dashboardState.availableLockersCount()"
+    icon="event_seat"
+  />
+
+  <div class="recent-check-ins-card">
+    <div class="card-header">
+      <h3>Recent Check-ins</h3>
+    </div>
+    <ul class="check-in-list">
+      @for(checkIn of dashboardState.recentCheckIns(); track checkIn.memberName) {
+        <li class="check-in-item">
+          <div class="member-info">
+            <span class="member-name">{{ checkIn.memberName }}</span>
+            <span class="check-in-time">{{ checkIn.checkInTime | date: 'shortTime' }}</span>
+          </div>
+          <div class="locker-info">
+            <span class="locker-label">Locker</span>
+            <span class="locker-number">{{ checkIn.lockerNumber }}</span>
+          </div>
+        </li>
+      }
+    </ul>
   </div>
-  <div class="stat-card">
-    <h3>Available Lockers</h3>
-    <p>{{ availableLockers() }} / {{ totalLockers() }}</p>
+
+  <div class="weekly-chart-card">
+    <div class="card-header">
+      <h3>Weekly Active Members</h3>
+    </div>
+    <app-weekly-active-members-chart />
   </div>
-</div>
-<div class="chart-section">
-  <h3>Weekly Active Members</h3>
-  <app-weekly-active-members-chart></app-weekly-active-members-chart>
 </div>

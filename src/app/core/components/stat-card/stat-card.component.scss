@@ -1,0 +1,47 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.stat-card-container {
+  background-color: #2c2c2c;
+  border-radius: 8px;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  flex-grow: 1;
+  gap: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: -webkit-fill-available;
+}
+
+.title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  color: #ffd700;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.icon {
+  font-size: 2rem;
+  color: #aaa;
+}
+
+.value {
+  font-size: 3rem;
+  font-weight: 500;
+  color: #fff;
+  margin: 0;
+  line-height: 1;
+  align-self: flex-start;
+  margin-left:3rem;
+}

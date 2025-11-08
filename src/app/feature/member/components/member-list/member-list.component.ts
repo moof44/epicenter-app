@@ -1,51 +1,46 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MemberStateService } from '@app/core/services/member-state.service';
 import { Router, RouterModule } from '@angular/router';
-import { Member } from '@app/core/models/member.model';
+import { CommonModule } from '@angular/common';
+import { MemberStateService } from '../../../../core/state/member-state.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-member-list',
   templateUrl: './member-list.component.html',
   styleUrls: ['./member-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterModule]
+  imports: [CommonModule, RouterModule, FormsModule],
 })
 export class MemberListComponent {
   public memberState = inject(MemberStateService);
-  private router = inject(Router);
+  public router = inject(Router);
 
   public searchTerm = signal('');
   public currentPage = signal(1);
-  public pageSize = 10;
+  public itemsPerPage = signal(10);
 
   public filteredMembers = computed(() => {
     const term = this.searchTerm().toLowerCase();
-    if (!term) {
-      return this.memberState.members();
-    }
-    return this.memberState.members().filter((member: Member) =>
+    return this.memberState.members().filter(member =>
       member.name.toLowerCase().includes(term) ||
-      member.contactNumber.toLowerCase().includes(term) ||
+      member.address.toLowerCase().includes(term) ||
+      member.contactNumber.includes(term) ||
       member.goal.toLowerCase().includes(term)
     );
   });
 
-  public paginatedMembers = computed(() => {
-    const allMembers = this.filteredMembers();
-    const startIndex = (this.currentPage() - 1) * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
-    return allMembers.slice(startIndex, endIndex);
+  public totalPages = computed(() => {
+    return Math.ceil(this.filteredMembers().length / this.itemsPerPage());
   });
 
-  public totalPages = computed(() => {
-    const total = this.filteredMembers().length;
-    return total > 0 ? Math.ceil(total / this.pageSize) : 1;
+  public paginatedMembers = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.itemsPerPage();
+    const endIndex = startIndex + this.itemsPerPage();
+    return this.filteredMembers().slice(startIndex, endIndex);
   });
-  
-  public onSearch(event: Event): void {
-    const term = (event.target as HTMLInputElement).value;
-    this.searchTerm.set(term);
+
+  public onSearch(event: Event) {
+    this.searchTerm.set((event.target as HTMLInputElement).value);
     this.currentPage.set(1);
   }
 
@@ -62,6 +57,6 @@ export class MemberListComponent {
   }
 
   public goToUpdate(id: string): void {
-    this.router.navigate(['/members/update', id]);
+    this.router.navigate(['/members', id, 'edit']);
   }
 }

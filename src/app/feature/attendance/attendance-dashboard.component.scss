@@ -1,0 +1,59 @@
+.attendance-container {
+  background-color: #242424;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.list-header {
+  margin-bottom: 1.5rem;
+}
+
+.list-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  color: #ffd700;
+  margin: 0;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.dashboard-card {
+  background-color: #2c2c2c;
+  padding: 1.5rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+}
+
+.card-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  color: #ffd700;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.attendance-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.attendance-list-item {
+  background-color: #3a3a3a;
+  border: 1px solid #444;
+  padding: 1rem;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+}
+
+.attendance-list-item span {
+  flex: 1;
+}
