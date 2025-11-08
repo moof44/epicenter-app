@@ -14,7 +14,7 @@ export class DashboardStateService {
   public totalMembers = computed(() => this.memberState.members().length);
   public activeMembers = computed(() => this.memberState.members().filter(m => m.membershipStatus === 'Active').length);
   public checkedInCount = computed(() => this.attendanceState.attendances().filter(a => !a.checkOutTime).length);
-  public availableLockersCount = computed(() => this.lockerState.lockers().filter(l => l.isAvailable).length);
+  public availableLockersCount = computed(() => this.lockerState.availableLockers().length);
 
   public recentCheckIns = computed(() => {
     const attendances = this.attendanceState.attendances()
