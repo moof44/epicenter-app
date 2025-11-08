@@ -1,0 +1,83 @@
+{
+  "configVersion": 1,
+  "timestamp": 1762619093022,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/chunk-2LF3AS2D.js",
+        "/chunk-DKPRHTVM.js",
+        "/chunk-I227JE3P.js",
+        "/chunk-I2EJMYRM.js",
+        "/chunk-NIT3YHMW.js",
+        "/chunk-QEDN3JYM.js",
+        "/chunk-U7RU7XOI.js",
+        "/chunk-ULNY5J4F.js",
+        "/chunk-VVJRZXDM.js",
+        "/chunk-ZS4IW2D6.js",
+        "/index.html",
+        "/main-UYL7WAWN.js",
+        "/polyfills-5CFQRCPP.js",
+        "/scripts-DC36RK3P.js",
+        "/styles-2HWDXTF6.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/assets/images/logo.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/assets/images/logo.png": "11ab512222859c1d0de6f33310a7a4e08c7c8fd1",
+    "/chunk-2LF3AS2D.js": "dad7e96f115e0573e5d37e1c1d8c223bb9b6ff90",
+    "/chunk-DKPRHTVM.js": "dc247f2f7a55637748b75ba660ff5a042d90cb59",
+    "/chunk-I227JE3P.js": "a48241d85a44534067c1d62b7b630fa857fb0082",
+    "/chunk-I2EJMYRM.js": "34b0a342e48c67b4938d6d96bff4ce379d8038f7",
+    "/chunk-NIT3YHMW.js": "e6e16646241d4dd2d63fb6e99873a9eb198302ef",
+    "/chunk-QEDN3JYM.js": "8022f3c674fe96a5d06d6e15278141a7dd821e91",
+    "/chunk-U7RU7XOI.js": "8c0c720aa6a7c02fa5296c1c7a6bb3990d1767fd",
+    "/chunk-ULNY5J4F.js": "b8cc06a12f7b6f892c968a2dc629169c8078344e",
+    "/chunk-VVJRZXDM.js": "3584378048b934d46e608c02514c35521bba7e74",
+    "/chunk-ZS4IW2D6.js": "b9e6fc6a484aa19ff8655282cf51a01e18a556bb",
+    "/index.html": "f0d35062f396c2445b718a5f73923f1018f92d8b",
+    "/main-UYL7WAWN.js": "498795b98e4d535df2e96d6a8a7f3a957bccd9c7",
+    "/polyfills-5CFQRCPP.js": "f2241e9a25858f895ce299d15f6f22e849e2fd72",
+    "/scripts-DC36RK3P.js": "f96688e826388b469570d2542795bf599da06cec",
+    "/styles-2HWDXTF6.css": "0fcd1f3ca4f074a7a2adbe410e566f0e2c1b952b"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
