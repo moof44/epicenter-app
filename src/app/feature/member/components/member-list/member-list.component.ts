@@ -25,7 +25,8 @@ export class MemberListComponent {
       member.name.toLowerCase().includes(term) ||
       member.address.toLowerCase().includes(term) ||
       member.contactNumber.includes(term) ||
-      member.goal.toLowerCase().includes(term)
+      member.goal.toLowerCase().includes(term) ||
+      member.subscription?.toLowerCase().includes(term)
     );
   });
 

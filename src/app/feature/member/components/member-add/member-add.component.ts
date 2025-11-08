@@ -21,11 +21,13 @@ export class MemberAddComponent {
 
   public memberForm = this.fb.group({
     name: ['', Validators.required],
-  contactNumber: ['', Validators.required],
+    contactNumber: ['', Validators.required],
     address: ['', Validators.required],
     goal: ['', Validators.required],
     gender: ['', Validators.required],
     birthday: [''],
+    subscription: [''],
+    expiration: [''],
   });
 
   public goalInputValue = signal<string>('');
@@ -66,7 +68,9 @@ export class MemberAddComponent {
         goal: formValue.goal!,
         gender: formValue.gender! as Gender,
         membershipStatus: 'Active',
-        birthday: formValue.birthday ? new Date(formValue.birthday) : undefined,
+        birthday: formValue.birthday ? new Date(formValue.birthday) : null,
+        subscription: formValue.subscription || null,
+        expiration: formValue.expiration ? new Date(formValue.expiration) : null,
       };
       await this.memberState.addMember(newMember);
       this.router.navigate(['/members']);

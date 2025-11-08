@@ -69,6 +69,16 @@
         <input id="birthday" type="date" formControlName="birthday" />
       </div>
 
+      <div class="form-field">
+        <label for="subscription">Subscription</label>
+        <input id="subscription" formControlName="subscription" placeholder="e.g., Premium" />
+      </div>
+
+      <div class="form-field">
+        <label for="expiration">Expiration Date</label>
+        <input id="expiration" type="date" formControlName="expiration" />
+      </div>
+
       <div class="form-actions">
         <button type="submit" [disabled]="memberForm.invalid || memberState.loading()" class="save-button">Save Member</button>
         <button type="button" (click)="cancel()" [disabled]="memberState.loading()" class="cancel-button">Cancel</button>

@@ -10,6 +10,8 @@ export const MEMBER_MOCK: Member[] = [
     membershipStatus: 'Active',
     gender: Gender.Male,
     birthday: new Date('1990-01-15'),
+    subscription: 'Premium',
+    expiration: new Date('2024-12-31'),
   },
   {
     id: '2',
@@ -20,6 +22,8 @@ export const MEMBER_MOCK: Member[] = [
     membershipStatus: 'Active',
     gender: Gender.Female,
     birthday: new Date('1992-05-20'),
+    subscription: 'Basic',
+    expiration: new Date('2024-10-15'),
   },
   {
     id: '3',
@@ -40,6 +44,8 @@ export const MEMBER_MOCK: Member[] = [
     membershipStatus: 'Inactive',
     gender: Gender.Female,
     birthday: new Date('1995-03-04'),
+    subscription: 'Basic',
+    expiration: new Date('2022-03-04'),
   },
   {
     id: '5',

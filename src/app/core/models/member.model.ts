@@ -13,5 +13,7 @@ export interface Member {
   goal: string;
   membershipStatus: MembershipStatus;
   gender: Gender;
-  birthday?: Date;
+  birthday?: Date | null;
+  subscription?: string | null;
+  expiration?: Date | null;
 }

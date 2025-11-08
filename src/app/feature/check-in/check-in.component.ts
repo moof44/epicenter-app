@@ -92,16 +92,22 @@ export class CheckInComponent {
   async checkIn(): Promise<void> {
     const member = this.selectedMember();
     if (member) {
-      await this.attendanceStateService.addAttendance({
+      const attendance: Partial<Attendance> = {
         memberId: member.id,
         checkInTime: new Date(),
-        lockerNumber: this.selectedLocker() ?? undefined,
-      });
+      };
+
+      const locker = this.selectedLocker();
+      if (locker) {
+        attendance.lockerNumber = locker;
+      }
+
+      await this.attendanceStateService.addAttendance(attendance);
       this.snackBar.open(`${member.name} checked in successfully!`, 'Close', {
         duration: 3000,
         verticalPosition: 'bottom',
         horizontalPosition: 'right',
-        panelClass: ['app-snackbar']
+        panelClass: ['app-snackbar'],
       });
       this.resetSelection();
     }
@@ -120,7 +126,7 @@ export class CheckInComponent {
         duration: 3000,
         verticalPosition: 'bottom',
         horizontalPosition: 'right',
-        panelClass: ['app-snackbar']
+        panelClass: ['app-snackbar'],
       });
       this.resetSelection();
     }

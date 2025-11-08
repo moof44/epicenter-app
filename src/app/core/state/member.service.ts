@@ -8,9 +8,11 @@ import {
   updateDoc,
   deleteDoc,
   DocumentReference,
+  Timestamp,
 } from '@angular/fire/firestore';
 import { Member } from '../models/member.model';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -26,9 +28,28 @@ export class MemberService {
     const members$ = collectionData(this.membersCollection, {
       idField: 'id',
     }) as Observable<Member[]>;
-    members$.subscribe((members) => {
+    members$.pipe(
+      map(members => members.map(member => ({
+        ...member,
+        birthday: this.convertToDate(member.birthday),
+        expiration: this.convertToDate(member.expiration),
+      })))
+    ).subscribe((members) => {
       this.membersSignal.set(members);
     });
+  }
+
+  private convertToDate(date: any): Date | undefined {
+    if (!date) {
+      return undefined;
+    }
+    if (date instanceof Timestamp) {
+      return date.toDate();
+    }
+    if (typeof date === 'string' || typeof date === 'number') {
+      return new Date(date);
+    }
+    return date;
   }
 
   getMember(id: string) {
