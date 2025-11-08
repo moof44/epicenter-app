@@ -17,6 +17,7 @@ Epicenter is a modern, reactive gym management application built with the latest
   - View a paginated and searchable list of all members.
   - Add new members with details such as name, contact information, address, fitness goal, gender, birthday, subscription type, and expiration date.
   - Update existing member information.
+  - Delete members with a confirmation step.
   - View detailed information for a specific member.
 - **Check-In System**: A streamlined process for members to check in and out of the facility.
   - Members can select their name and an available locker upon check-in.
@@ -73,3 +74,11 @@ Epicenter is a modern, reactive gym management application built with the latest
     - Corrected a styling bug in the shared `LoadingComponent` where the loading overlay was not covering the entire screen.
     - The `position` property of the loading overlay was changed from `absolute` to `fixed`, ensuring it covers the full viewport.
     - Removed an unnecessary `border-radius` from the overlay to prevent it from having rounded corners.
+- **Implement Member Deletion with Confirmation**:
+    - Created a reusable, standalone `ConfirmationDialogComponent` in the `shared` module to handle confirmation prompts.
+    - Integrated the confirmation dialog into the `MemberListComponent` to prompt the user before deleting a member.
+    - Added a "Delete" button to each row in the member list table.
+    - Implemented the `deleteMember` method in the `MemberStateService` and `MemberService` to handle the deletion logic in the application state and Firestore database.
+- **Fix Check-In without Locker Bug**:
+    - Resolved a critical bug where checking in a member without assigning a locker would cause a Firestore error.
+    - The `checkIn` method in the `CheckInComponent` was updated to conditionally add the `lockerNumber` to the attendance record only if a locker is selected. This prevents `undefined` values from being sent to Firestore.
