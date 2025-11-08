@@ -15,7 +15,7 @@ Epicenter is a modern, reactive gym management application built with the latest
   - Quick access to recent check-ins.
 - **Member Management**: A complete CRUD (Create, Read, Update, Delete) interface for gym members.
   - View a paginated and searchable list of all members.
-  - Add new members with details such as name, contact information, address, fitness goal, gender and birthday.
+  - Add new members with details such as name, contact information, address, fitness goal, gender, birthday, subscription type, and expiration date.
   - Update existing member information.
   - View detailed information for a specific member.
 - **Check-In System**: A streamlined process for members to check in and out of the facility.
@@ -57,3 +57,19 @@ Epicenter is a modern, reactive gym management application built with the latest
     - Added `@angular/pwa` to the project.
     - Configured the web app manifest (`manifest.webmanifest`) and service worker (`ngsw-config.json`).
     - Added a `theme-color` meta tag to `index.html`.
+- **Add Optional Subscription and Expiration Fields**:
+    - Updated the `Member` model to include optional `subscription` (string) and `expiration` (Date) fields.
+    - Modified the "add member" and "update member" forms to include inputs for these new fields.
+    - Updated the member list to display the `subscription` and `expiration` date.
+    - Enhanced the member list search to allow filtering by subscription status.
+- **Fix Date Handling for Firestore Timestamps**:
+    - Resolved a runtime error (`NG02100: InvalidPipeArgument`) that occurred because the `DatePipe` could not handle Firestore's `Timestamp` object.
+    - Implemented a data transformation in the `MemberService` to convert `Timestamp` objects from Firestore into standard JavaScript `Date` objects. This ensures that dates are correctly displayed throughout the application.
+- **Resolve Firestore Field Update Bug**:
+    - Fixed an issue where clearing an optional date field (like `expiration`) during an update would cause the operation to fail.
+    - The `Member` model was updated to explicitly allow `null` values for optional fields.
+    - The `member-add` and `member-update` components were modified to use `null` instead of `undefined` for empty optional fields. This aligns with Firestore's requirement for clearing field values, ensuring that updates and additions work correctly.
+- **Fix Full-Screen Loading Indicator**:
+    - Corrected a styling bug in the shared `LoadingComponent` where the loading overlay was not covering the entire screen.
+    - The `position` property of the loading overlay was changed from `absolute` to `fixed`, ensuring it covers the full viewport.
+    - Removed an unnecessary `border-radius` from the overlay to prevent it from having rounded corners.

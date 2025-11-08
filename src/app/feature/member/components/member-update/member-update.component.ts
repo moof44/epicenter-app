@@ -31,6 +31,8 @@ export class MemberUpdateComponent {
     goal: ['', Validators.required],
     gender: ['', Validators.required],
     birthday: [''],
+    subscription: [''],
+    expiration: [''],
   });
 
   private member = computed(() => {
@@ -50,12 +52,14 @@ export class MemberUpdateComponent {
     effect(() => {
       const foundMember = this.member();
       if (foundMember) {
-        // Convert Firestore Timestamp to JavaScript Date
         const birthdayDate = (foundMember.birthday as any)?.toDate ? (foundMember.birthday as any).toDate() : foundMember.birthday;
         const formattedBirthday = this.datePipe.transform(birthdayDate, 'yyyy-MM-dd') || '';
+        const expirationDate = (foundMember.expiration as any)?.toDate ? (foundMember.expiration as any).toDate() : foundMember.expiration;
+        const formattedExpiration = this.datePipe.transform(expirationDate, 'yyyy-MM-dd') || '';
         this.memberForm.patchValue({
           ...foundMember,
           birthday: formattedBirthday,
+          expiration: formattedExpiration,
         });
         this.goalInputValue.set(foundMember.goal || '');
       }
@@ -96,7 +100,9 @@ export class MemberUpdateComponent {
         contactNumber: formValue.contactNumber!,
         goal: formValue.goal!,
         gender: formValue.gender! as Gender,
-        birthday: formValue.birthday ? new Date(formValue.birthday) : undefined,
+        birthday: formValue.birthday ? new Date(formValue.birthday) : null,
+        subscription: formValue.subscription || null,
+        expiration: formValue.expiration ? new Date(formValue.expiration) : null,
       };
 
       await this.memberState.updateMember(updatedMember);

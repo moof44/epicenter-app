@@ -51,6 +51,14 @@
           <label for="birthday">Birthday</label>
           <input id="birthday" type="date" formControlName="birthday" />
         </div>
+        <div class="form-group">
+          <label for="subscription">Subscription</label>
+          <input id="subscription" formControlName="subscription" placeholder="e.g., Premium" />
+        </div>
+        <div class="form-group">
+          <label for="expiration">Expiration Date</label>
+          <input id="expiration" type="date" formControlName="expiration" />
+        </div>
         <div class="form-actions">
           <button type="submit" [disabled]="memberForm.invalid || memberState.loading()" class="btn btn-primary">Update Member</button>
           <div class="secondary-actions">

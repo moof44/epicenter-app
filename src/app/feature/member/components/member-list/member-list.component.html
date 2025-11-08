@@ -21,6 +21,8 @@
           <th class="col-address hide-on-mobile">Address</th>
           <th class="col-contact hide-on-tablet">Contact Number</th>
           <th class="col-goal">Goal</th>
+          <th class="col-subscription">Subscription</th>
+          <th class="col-expiration">Expiration</th>
         </tr>
       </thead>
       <tbody>
@@ -30,6 +32,8 @@
             <td data-label="Address" class="col-address hide-on-mobile">{{ member.address }}</td>
             <td data-label="Contact" class="col-contact hide-on-tablet">{{ member.contactNumber }}</td>
             <td data-label="Goal" class="col-goal">{{ member.goal }}</td>
+            <td data-label="Subscription" class="col-subscription">{{ member.subscription }}</td>
+            <td data-label="Expiration" class="col-expiration">{{ member.expiration | date: 'mediumDate' }}</td>
           </tr>
         }
       </tbody>
