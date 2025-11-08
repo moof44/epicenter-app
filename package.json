@@ -29,7 +29,7 @@
     "@angular/core": "^20.3.0",
     "@angular/fire": "^20.0.1",
     "@angular/forms": "^20.3.0",
-    "@angular/material": "^20.2.11",
+    "@angular/material": "^20.2.12",
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
     "@firebase/firestore": "^4.9.2",

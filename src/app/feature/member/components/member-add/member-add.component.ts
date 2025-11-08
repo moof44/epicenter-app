@@ -4,17 +4,18 @@ import { Router } from '@angular/router';
 import { MemberStateService } from '../../../../core/state/member-state.service';
 import { GOALS } from '../../../../core/data/goals';
 import { Member, Gender } from '../../../../core/models/models/member.model';
+import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'app-member-add',
   templateUrl: './member-add.component.html',
   styleUrls: ['./member-add.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule]
+  imports: [ReactiveFormsModule, LoadingComponent]
 })
 export class MemberAddComponent {
   private fb = inject(FormBuilder);
-  private memberState = inject(MemberStateService);
+  public memberState = inject(MemberStateService);
   private router = inject(Router);
   private eRef = inject(ElementRef);
 

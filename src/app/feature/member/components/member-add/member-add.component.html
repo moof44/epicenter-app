@@ -2,6 +2,9 @@
   <div class="add-member-card">
     <h2 class="form-title">Add New Member</h2>
     <form [formGroup]="memberForm" (ngSubmit)="saveMember()" class="member-form">
+      @if(memberState.loading()) {
+        <app-loading />
+      }
       <div class="form-field">
         <label for="name">Name</label>
         <input id="name" formControlName="name" placeholder="e.g., Jane Doe" />
@@ -67,8 +70,8 @@
       </div>
 
       <div class="form-actions">
-        <button type="submit" [disabled]="memberForm.invalid" class="save-button">Save Member</button>
-        <button type="button" (click)="cancel()" class="cancel-button">Cancel</button>
+        <button type="submit" [disabled]="memberForm.invalid || memberState.loading()" class="save-button">Save Member</button>
+        <button type="button" (click)="cancel()" [disabled]="memberState.loading()" class="cancel-button">Cancel</button>
       </div>
     </form>
   </div>

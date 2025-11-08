@@ -29,6 +29,7 @@ Epicenter is a modern, reactive gym management application built with the latest
 - **Architecture**: 100% Standalone Components, Pipes, and Directives. No NgModules.
 - **State Management**: Utilizes Angular Signals for reactive and efficient state management. Singleton services (`providedIn: 'root'`) hold the application's state, and components subscribe to this state using signals.
 - **Styling**: Modern CSS with a focus on a clean, responsive, and mobile-first design. It features a dark theme, well-defined component styles, and a consistent visual language.
+- **UI Components**: Primarily uses browser-native modern CSS for a unique look and feel. It incorporates `@angular/material` for specific, feature-rich components like `MatSnackBar` to handle application-wide notifications.
 - **Control Flow**: Uses Angular's new built-in control flow (`@if`, `@for`, `@switch`) for more intuitive and performant templates.
 - **Data**: Mock data is used for all features, simulating a real backend.
 
@@ -44,18 +45,11 @@ Epicenter is a modern, reactive gym management application built with the latest
   - `font-family`: `'Roboto', sans-serif` for body, `'Bebas Neue', sans-serif` for headings.
 - **Overall Feel**: The application has a modern, premium, and energetic feel. The dark theme with the gold accent color creates a high-contrast and visually appealing experience. The use of `Bebas Neue` for headings adds a strong, athletic feel.
 
-### Current Task: Add Birthday to Member
+### Feature History
 
-**Objective**: Add a `birthday` field to the member model and integrate it into the user interface.
-
-**Steps Completed**:
-
-1.  **Model Update**: Added an optional `birthday: Date` field to the `Member` interface in `src/app/core/models/models/member.model.ts`.
-2.  **Mock Data Update**: Updated the member mock data in `src/app/core/mock/member.mock.ts` to include birthday information for existing members.
-3.  **UI Enhancement (Add Member)**:
-    - Added a `<input type="date">` to the `member-add.component.html` template.
-    - Updated `member-add.component.ts` to include a `birthday` control in the form group and to pass the value when creating a new member.
-4.  **UI Enhancement (Update Member)**:
-    - Added a `<input type="date">` to the `member-update.component.html` template.
-    - Updated `member-update.component.ts` to include the `birthday` control, pre-fill it with the member's existing birthday, and include it in the update payload.
-5.  **Verification**: Ran `ng build` to ensure the application compiles successfully without any errors.
+- **Add Birthday to Member**: Integrated a `birthday` field into the member model, add/update forms, and mock data.
+- **Loading Indicator**: Implemented a loading indicator for member add/update operations.
+- **Refactor Messaging to `MatSnackBar`**: Replaced the initial custom-built messaging component with Angular Material's `MatSnackBar`.
+    - Installed `@angular/material` and configured it in the application's `app.config.ts`.
+    - Replaced the custom `MessageStateService` with the `MatSnackBar` service in `MemberStateService` and `CheckInComponent`.
+    - Removed the custom `MessageComponent` and its associated service to streamline the codebase and rely on a robust, third-party library for notifications.
