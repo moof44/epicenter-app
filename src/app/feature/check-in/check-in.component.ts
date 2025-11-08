@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MemberStateService } from '../../core/state/member-state.service';
 import { AttendanceStateService } from '../../core/state/attendance-state.service';
 import { LockerStateService } from '../../core/state/locker-state.service';
 import { Member } from '../../core/models/models/member.model';
 import { FormsModule } from '@angular/forms';
-import { computed } from '@angular/core';
 import { Attendance } from '../../core/models/models/attendance.model';
 
 @Component({
@@ -22,7 +21,7 @@ import { Attendance } from '../../core/models/models/attendance.model';
           placeholder="Search for a member..."
           class="search-input"
           [value]="searchTerm()"
-          (input)="searchTerm.set($event.target.value)"
+          (input)="handleSearchInput($event)"
         />
       </div>
 
@@ -40,7 +39,7 @@ import { Attendance } from '../../core/models/models/attendance.model';
           @if (!isMemberCheckedIn(member.id)) {
             <div class="locker-assignment">
               <label for="locker">Assign Locker?</label>
-              <input type="checkbox" id="locker" [checked]="assignLocker()" (change)="assignLocker.set($event.target.checked)" />
+              <input type="checkbox" id="locker" [checked]="assignLocker()" (change)="handleLockerChange($event)" />
             </div>
 
             @if (assignLocker()) {
@@ -54,6 +53,27 @@ import { Attendance } from '../../core/models/models/attendance.model';
             <button (click)="checkIn()" class="check-in-button">Check-in</button>
           } @else {
             <button (click)="checkOut()" class="check-out-button">Check-out</button>
+          }
+        </div>
+        
+        <div class="attendance-history">
+          <h3 class="history-title">Attendance History</h3>
+          @if(memberAttendanceHistory().length > 0) {
+            <ul class="history-list">
+                @for(attendance of memberAttendanceHistory(); track attendance.id) {
+                    <li class="history-list-item">
+                        <span>Check-in: {{ attendance.checkInTime | date:'short' }}</span>
+                        @if(attendance.checkOutTime) {
+                            <span>Check-out: {{ attendance.checkOutTime | date:'short' }}</span>
+                        }
+                        @if(attendance.lockerNumber) {
+                            <span>Locker: {{ attendance.lockerNumber }}</span>
+                        }
+                    </li>
+                }
+            </ul>
+          } @else {
+            <p>No attendance history for this member.</p>
           }
         </div>
       }
@@ -168,6 +188,36 @@ import { Attendance } from '../../core/models/models/attendance.model';
     .check-out-button:hover {
       background-color: #e6c300;
     }
+
+    .attendance-history {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background-color: #2c2c2c;
+      border-radius: 4px;
+    }
+
+    .history-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      color: #ffd700;
+      margin-top: 0;
+    }
+
+    .history-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .history-list-item {
+      background-color: #3a3a3a;
+      border: 1px solid #444;
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+    }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule]
@@ -178,12 +228,21 @@ export class CheckInComponent {
   public lockerStateService = inject(LockerStateService);
 
   public searchTerm = signal('');
-  public filteredMembers = signal<Member[]>([]);
   public selectedMember = signal<Member | null>(null);
   public assignLocker = signal(false);
   public selectedLocker = signal<number | null>(null);
 
   private members = computed(() => this.memberStateService.members());
+
+  public filteredMembers = computed(() => {
+    const term = this.searchTerm();
+    if (!term) {
+      return [];
+    }
+    const lowercasedTerm = term.toLowerCase();
+    return this.members().filter((m: Member) => m.name.toLowerCase().includes(lowercasedTerm));
+  });
+
   public availableLockers = computed(() => {
     const member = this.selectedMember();
     if (member) {
@@ -192,23 +251,25 @@ export class CheckInComponent {
     return [];
   });
 
-  constructor() {
-    computed(() => {
-      const term = this.searchTerm();
-      if (term) {
-        const lowercasedTerm = term.toLowerCase();
-        const filtered = this.members().filter((m: Member) => m.name.toLowerCase().includes(lowercasedTerm));
-        this.filteredMembers.set(filtered);
-      } else {
-        this.filteredMembers.set([]);
-      }
-    });
+  public memberAttendanceHistory = computed(() => {
+    const member = this.selectedMember();
+    if(member) {
+        return this.attendanceStateService.getAttendanceByMemberId(member.id);
+    }
+    return [];
+  });
+
+  handleSearchInput(event: Event): void {
+    this.searchTerm.set((event.target as HTMLInputElement).value);
+  }
+
+  handleLockerChange(event: Event): void {
+    this.assignLocker.set((event.target as HTMLInputElement).checked);
   }
 
   selectMember(member: Member): void {
     this.selectedMember.set(member);
     this.searchTerm.set('');
-    this.filteredMembers.set([]);
   }
 
   isMemberCheckedIn(memberId: string): boolean {

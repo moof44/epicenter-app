@@ -32,4 +32,8 @@ export class AttendanceStateService {
   updateAttendance(id: string, data: Partial<Attendance>): void {
     this.attendanceService.updateAttendance(id, data).subscribe();
   }
+
+  getAttendanceByMemberId(memberId: string): Attendance[] {
+    return this.attendances().filter(a => a.memberId === memberId);
+  }
 }
