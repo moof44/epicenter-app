@@ -38,3 +38,15 @@ body {
   background-color: #f44336; /* Red for errors */
   color: white;
 }
+
+.custom-menu-panel {
+  background-color: #3a3a3a !important;
+}
+
+.custom-menu-panel .mat-mdc-menu-item {
+  color: #fff !important;
+}
+
+.custom-menu-panel .mat-mdc-menu-item:hover {
+  background-color: #555 !important;
+}

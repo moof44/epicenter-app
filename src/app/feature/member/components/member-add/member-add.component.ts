@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal, HostListe
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MemberStateService } from '../../../../core/state/member-state.service';
-import { GOALS } from '../../../../core/data/goals';
-import { Member, Gender } from '../../../../core/models/models/member.model';
+import { GOALS } from '../../data/goals';
+import { Member, Gender } from '../../../../core/models/member.model';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 
 @Component({
@@ -21,7 +21,7 @@ export class MemberAddComponent {
 
   public memberForm = this.fb.group({
     name: ['', Validators.required],
-    contactNumber: ['', Validators.required],
+  contactNumber: ['', Validators.required],
     address: ['', Validators.required],
     goal: ['', Validators.required],
     gender: ['', Validators.required],

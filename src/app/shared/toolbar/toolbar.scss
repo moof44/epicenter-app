@@ -29,7 +29,8 @@
 }
 
 .black-toolbar {
-  background-color: #000;
+  background-color: black;
+  color: white;
 }
 
 .logo-container {
@@ -37,6 +38,18 @@
   align-items: center;
   text-decoration: none;
   color: white;
+}
+
+.header-icon{
+  color:white;
+}
+
+a {
+  color: white;
+}
+
+.custom-menu-panel a{
+  background-color: pink;
 }
 
 @media (min-width: 769px) {

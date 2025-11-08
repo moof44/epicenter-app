@@ -1,4 +1,4 @@
-import { Member, Gender } from '../models/models/member.model';
+import { Member, Gender } from '../models/member.model';
 
 export const MEMBER_MOCK: Member[] = [
   {

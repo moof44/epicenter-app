@@ -5,8 +5,7 @@ import { ToolbarComponent } from './shared/toolbar/toolbar';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, ToolbarComponent],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  templateUrl: './app.html'
 })
 export class AppComponent {
   title = 'angular-project';

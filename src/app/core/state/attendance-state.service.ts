@@ -1,5 +1,5 @@
 import { Injectable, inject, computed, Signal } from '@angular/core';
-import { Attendance } from '../models/models/attendance.model';
+import { Attendance } from '../models/attendance.model';
 import { AttendanceService } from './attendance.service';
 
 @Injectable({

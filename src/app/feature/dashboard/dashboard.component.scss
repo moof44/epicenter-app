@@ -1,6 +1,6 @@
 :host {
   display: block;
-  padding: 2rem;
+  padding: 1rem;
   background-color: #1a1a1a;
   color: #fff;
   font-family: 'Roboto', sans-serif;
@@ -148,6 +148,10 @@
 }
 
 @media (max-width: 768px) {
+  :host {
+    padding: 1rem;
+  }
+
   .dashboard-grid {
     grid-template-columns: 1fr;
     grid-template-areas:
