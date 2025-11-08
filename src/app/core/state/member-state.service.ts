@@ -78,4 +78,27 @@ export class MemberStateService {
       this._loading.set(false);
     }
   }
+
+  async deleteMember(id: string) {
+    this._loading.set(true);
+    try {
+      await this.memberService.deleteMember(id);
+      this.snackBar.open('Member deleted successfully!', 'Close', { 
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'right', 
+        panelClass: ['app-snackbar']
+      });
+    } catch (error) {
+      this._error.set(error);
+      this.snackBar.open('Failed to delete member.', 'Close', {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+        verticalPosition: 'bottom',
+        horizontalPosition: 'right'
+      });
+    } finally {
+      this._loading.set(false);
+    }
+  }
 }

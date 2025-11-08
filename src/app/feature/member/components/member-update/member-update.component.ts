@@ -1,3 +1,4 @@
+
 import { ChangeDetectionStrategy, Component, computed, inject, signal, HostListener, ElementRef, input, effect } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -6,6 +7,7 @@ import { MemberStateService } from '../../../../core/state/member-state.service'
 import { Member, Gender } from '../../../../core/models/member.model';
 import { GOALS } from '../../data/goals';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-member-update',
@@ -21,6 +23,7 @@ export class MemberUpdateComponent {
   public memberState = inject(MemberStateService);
   private eRef = inject(ElementRef);
   private datePipe = inject(DatePipe);
+  private snackBar = inject(MatSnackBar);
 
   public id = input.required<string>();
 
@@ -86,6 +89,25 @@ export class MemberUpdateComponent {
     this.isDropdownVisible.set(false);
   }
 
+  private isEqual(original: Member, updated: Member): boolean {
+    return (
+      original.name === updated.name &&
+      original.address === updated.address &&
+      original.contactNumber === updated.contactNumber &&
+      original.goal === updated.goal &&
+      original.gender === updated.gender &&
+      this.compareDates(original.birthday ?? null, updated.birthday ?? null) &&
+      original.subscription === updated.subscription &&
+      this.compareDates(original.expiration ?? null, updated.expiration ?? null)
+    );
+  }
+
+  private compareDates(date1: Date | null, date2: Date | null): boolean {
+    if (date1 === null && date2 === null) return true;
+    if (date1 === null || date2 === null) return false;
+    return date1.getTime() === date2.getTime();
+  }
+
   public async updateMember(): Promise<void> {
     if (this.memberForm.valid) {
       const originalMember = this.member();
@@ -104,6 +126,15 @@ export class MemberUpdateComponent {
         subscription: formValue.subscription || null,
         expiration: formValue.expiration ? new Date(formValue.expiration) : null,
       };
+
+      if (this.isEqual(originalMember, updatedMember)) {
+        this.snackBar.open('No changes detected.', 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'right',
+        });
+        return;
+      }
 
       await this.memberState.updateMember(updatedMember);
       this.router.navigate(['/members']);
