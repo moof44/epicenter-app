@@ -1,37 +1,61 @@
-## Epicenter Fitness Blueprint
+# Epicenter App Blueprint
 
-### Overview
+## Overview
 
-Epicenter Fitness is a modern, interactive gym management application designed to streamline daily operations. It leverages the latest Angular features to provide a visually appealing and highly responsive user experience. The application is built with a focus on performance, maintainability, and a clean, intuitive design.
+Epicenter is a modern, reactive gym management application built with the latest features of Angular. It provides a seamless interface for managing members, tracking attendance, and overseeing facility resources like lockers. The application is designed to be intuitive, performant, and visually appealing, leveraging signals for state management, standalone components for a modular architecture, and a clean, mobile-first design.
 
-### Implemented Features & Design
+## Project Outline
 
-This section documents the current state of the application, including all major features and design decisions.
+### Core Features
 
-#### Core Architecture
+- **Dashboard**: A central hub that provides an at-a-glance view of key metrics:
+  - Total number of active members.
+  - Number of members currently checked in.
+  - Available locker count.
+  - Quick access to recent check-ins.
+- **Member Management**: A complete CRUD (Create, Read, Update, Delete) interface for gym members.
+  - View a paginated and searchable list of all members.
+  - Add new members with details such as name, contact information, address, fitness goal, gender and birthday.
+  - Update existing member information.
+  - View detailed information for a specific member.
+- **Check-In System**: A streamlined process for members to check in and out of the facility.
+  - Members can select their name and an available locker upon check-in.
+  - The system validates that a locker is available before allowing a check-in.
+  - The dashboard and locker availability are updated in real-time.
 
-*   **Standalone Components:** The entire application is built using Angular's standalone components, directives, and pipes, completely eliminating the need for `NgModules`.
-*   **OnPush Change Detection:** All components use `ChangeDetectionStrategy.OnPush` to optimize performance and minimize change detection cycles.
-*   **Signal-based State Management:** Component state is managed using Angular Signals, providing a reactive and efficient way to handle data.
-*   **Modern CSS:** The application is styled using modern, browser-native CSS for a clean and maintainable stylesheet.
-*   **External Templates & Styles:** For larger components, the template and styles are separated into their own dedicated files to improve organization and readability.
-*   **Real-time Data & Firestore Integration:** The application uses `@angular/fire` to connect to a Firestore database for real-time data streaming.
-    *   **Timestamp to Date Conversion:** A critical architectural decision is the conversion of Firestore `Timestamp` objects to JavaScript `Date` objects. This conversion is handled within the data services (e.g., `AttendanceService`).
-    *   **Problem:** Firestore returns date fields as `Timestamp` objects, which are incompatible with Angular's `DatePipe` and can lead to runtime errors (`NG02100: InvalidPipeArgument`).
-    *   **Solution:** The data services use an RxJS `map` operator to transform the `Timestamp` objects into `Date` objects immediately after the data is retrieved from Firestore. This ensures that the rest of the application, including all components and pipes, works with standard JavaScript `Date` objects, promoting consistency and preventing bugs.
+### Architecture & Design
 
-#### Check-in Page
+- **Framework**: Angular (v20+)
+- **Architecture**: 100% Standalone Components, Pipes, and Directives. No NgModules.
+- **State Management**: Utilizes Angular Signals for reactive and efficient state management. Singleton services (`providedIn: 'root'`) hold the application's state, and components subscribe to this state using signals.
+- **Styling**: Modern CSS with a focus on a clean, responsive, and mobile-first design. It features a dark theme, well-defined component styles, and a consistent visual language.
+- **Control Flow**: Uses Angular's new built-in control flow (`@if`, `@for`, `@switch`) for more intuitive and performant templates.
+- **Data**: Mock data is used for all features, simulating a real backend.
 
-*   **Two-Column Layout:** The check-in page is divided into two distinct columns to provide a clear and organized user interface.
-    *   **Left Column (Check-in):** This column contains the member search and check-in functionality. The search results are filtered to show only members who are not currently checked in, preventing duplicate entries.
-    *   **Right Column (Currently Checked-in):** This column displays a real-time list of all members who are currently checked into the facility.
-*   **Direct Check-out:** Each member in the "Currently Checked-in" list has a "Check-out" button, allowing for a quick and efficient check-out process without needing to search for the member.
-*   **Visual Design:** The page follows the application's dark, modern theme, with a black and gold color scheme. It features a responsive layout that adapts to different screen sizes.
+### Visual Design
 
-#### Attendance Dashboard
+- **Color Palette**:
+  - `primary-background`: `#1a1a1a` (Dark, almost black)
+  - `secondary-background`: `#242424` (Slightly lighter dark gray)
+  - `ui-background`: `#3a3a3a` (Medium dark gray for UI elements)
+  - `primary-accent`: `#ffd700` (Vibrant gold/yellow)
+  - `primary-text`: `#fff` (White)
+- **Typography**:
+  - `font-family`: `'Roboto', sans-serif` for body, `'Bebas Neue', sans-serif` for headings.
+- **Overall Feel**: The application has a modern, premium, and energetic feel. The dark theme with the gold accent color creates a high-contrast and visually appealing experience. The use of `Bebas Neue` for headings adds a strong, athletic feel.
 
-*   **Purpose:** Provides a real-time overview of the gym's daily attendance, separated into two clear sections.
-*   **Visual Design:** The dashboard adheres to the project's modern, dark, and energetic theme. It uses the "Bebas Neue" font for titles and a dark color palette with yellow accents for a visually striking and easy-to-read interface.
-*   **Component Structure:** The template and styles for the dashboard are maintained in separate `html` and `scss` files, promoting a clean and organized component structure.
-*   **"Checked In" Section:** This card displays a list of all members who are currently inside the facility. The logic for this is based on the absence of a `checkOutTime` in the member's attendance record. It also displays the assigned locker number, if available.
-*   **"Today's History" Section:** This card shows a list of members who have already checked out for the day. This is determined by the presence of a `checkOutTime` in their attendance record. The display includes both their check-in and check-out times.
+### Current Task: Add Birthday to Member
+
+**Objective**: Add a `birthday` field to the member model and integrate it into the user interface.
+
+**Steps Completed**:
+
+1.  **Model Update**: Added an optional `birthday: Date` field to the `Member` interface in `src/app/core/models/models/member.model.ts`.
+2.  **Mock Data Update**: Updated the member mock data in `src/app/core/mock/member.mock.ts` to include birthday information for existing members.
+3.  **UI Enhancement (Add Member)**:
+    - Added a `<input type="date">` to the `member-add.component.html` template.
+    - Updated `member-add.component.ts` to include a `birthday` control in the form group and to pass the value when creating a new member.
+4.  **UI Enhancement (Update Member)**:
+    - Added a `<input type="date">` to the `member-update.component.html` template.
+    - Updated `member-update.component.ts` to include the `birthday` control, pre-fill it with the member's existing birthday, and include it in the update payload.
+5.  **Verification**: Ran `ng build` to ensure the application compiles successfully without any errors.

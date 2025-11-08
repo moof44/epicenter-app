@@ -24,6 +24,7 @@ export class MemberAddComponent {
     address: ['', Validators.required],
     goal: ['', Validators.required],
     gender: ['', Validators.required],
+    birthday: [''],
   });
 
   public goalInputValue = signal<string>('');
@@ -64,6 +65,7 @@ export class MemberAddComponent {
         goal: formValue.goal!,
         gender: formValue.gender! as Gender,
         membershipStatus: 'Active',
+        birthday: formValue.birthday ? new Date(formValue.birthday) : undefined,
       };
       await this.memberState.addMember(newMember);
       this.router.navigate(['/members']);

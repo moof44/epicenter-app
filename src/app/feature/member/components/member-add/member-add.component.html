@@ -61,6 +61,11 @@
         }
       </div>
 
+      <div class="form-field">
+        <label for="birthday">Birthday</label>
+        <input id="birthday" type="date" formControlName="birthday" />
+      </div>
+
       <div class="form-actions">
         <button type="submit" [disabled]="memberForm.invalid" class="save-button">Save Member</button>
         <button type="button" (click)="cancel()" class="cancel-button">Cancel</button>
