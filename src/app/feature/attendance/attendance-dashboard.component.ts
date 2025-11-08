@@ -98,7 +98,7 @@ import { MemberStateService } from '../../core/state/member-state.service';
       flex: 1;
     }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule]
 })
 export class AttendanceDashboardComponent {

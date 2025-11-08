@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, HostListener, ElementRef, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, HostListener, ElementRef, input, effect } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MemberStateService } from '../../../../core/state/member-state.service';
 import { Member, Gender } from '../../../../core/models/models/member.model';
@@ -16,9 +16,10 @@ import { GOALS } from '../../../../core/data/goals';
 export class MemberUpdateComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
   public memberState = inject(MemberStateService);
   private eRef = inject(ElementRef);
+
+  public id = input.required<string>();
 
   public memberForm = this.fb.group({
     name: ['', Validators.required],
@@ -28,6 +29,11 @@ export class MemberUpdateComponent {
     gender: ['', Validators.required],
   });
 
+  private member = computed(() => {
+    const memberId = this.id();
+    return this.memberState.members().find(m => m.id === memberId);
+  });
+
   public goalInputValue = signal<string>('');
   public isDropdownVisible = signal<boolean>(false);
   public filteredGoals = computed(() =>
@@ -35,17 +41,13 @@ export class MemberUpdateComponent {
       goal.toLowerCase().includes(this.goalInputValue().toLowerCase())
     )
   );
-  
-  private memberId: string = this.route.snapshot.paramMap.get('id') || '';
 
   constructor() {
-    this.memberState.selectMember(this.memberId);
-
     effect(() => {
-      const member = this.memberState.selectedMember();
-      if (member) {
-        this.memberForm.patchValue(member);
-        this.goalInputValue.set(member.goal || '');
+      const foundMember = this.member();
+      if (foundMember) {
+        this.memberForm.patchValue(foundMember);
+        this.goalInputValue.set(foundMember.goal || '');
       }
     });
   }
@@ -72,8 +74,8 @@ export class MemberUpdateComponent {
 
   public updateMember(): void {
     if (this.memberForm.valid) {
-      const originalMember = this.memberState.selectedMember();
-      if (!originalMember) return; // Should not happen
+      const originalMember = this.member();
+      if (!originalMember) return;
 
       const formValue = this.memberForm.value;
       const updatedMember: Member = {
@@ -92,7 +94,6 @@ export class MemberUpdateComponent {
   }
 
   public cancel(): void {
-    this.memberState.clearSelectedMember();
     this.router.navigate(['/members']);
   }
 }
