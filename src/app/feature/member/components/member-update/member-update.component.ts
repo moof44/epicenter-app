@@ -5,13 +5,14 @@ import { CommonModule } from '@angular/common';
 import { MemberStateService } from '../../../../core/state/member-state.service';
 import { Member, Gender } from '../../../../core/models/models/member.model';
 import { GOALS } from '../../../../core/data/goals';
+import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'app-member-update',
   templateUrl: './member-update.component.html',
   styleUrls: ['./member-update.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, LoadingComponent],
 })
 export class MemberUpdateComponent {
   private fb = inject(FormBuilder);

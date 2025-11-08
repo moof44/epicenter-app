@@ -1,5 +1,8 @@
 <div class="update-member-container">
     <div class="update-member-card">
+    @if(memberState.loading()) {
+        <app-loading />
+    }
       <div class="update-member-header">
         <h2 class="update-member-title">Update Member</h2>
         <p class="update-member-subtitle">Edit the details of the gym member.</p>
@@ -49,10 +52,10 @@
           <input id="birthday" type="date" formControlName="birthday" />
         </div>
         <div class="form-actions">
-          <button type="submit" [disabled]="memberForm.invalid" class="btn btn-primary">Update Member</button>
-          <button type="button" (click)="deleteMember()" class="btn btn-danger">Delete Member</button>
+          <button type="submit" [disabled]="memberForm.invalid || memberState.loading()" class="btn btn-primary">Update Member</button>
+          <button type="button" (click)="deleteMember()" [disabled]="memberState.loading()" class="btn btn-danger">Delete Member</button>
           <div class="secondary-actions">
-            <button type="button" (click)="cancel()" class="btn btn-secondary">Cancel</button>
+            <button type="button" (click)="cancel()" [disabled]="memberState.loading()" class="btn btn-secondary">Cancel</button>
           </div>
         </div>
       </form>
