@@ -46,6 +46,7 @@
         </div>
         <div class="form-actions">
           <button type="submit" [disabled]="memberForm.invalid" class="btn btn-primary">Update Member</button>
+          <button type="button" (click)="deleteMember()" class="btn btn-danger">Delete Member</button>
           <div class="secondary-actions">
             <button type="button" (click)="cancel()" class="btn btn-secondary">Cancel</button>
           </div>

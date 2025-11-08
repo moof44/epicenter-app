@@ -54,7 +54,7 @@ export class MemberAddComponent {
     this.isDropdownVisible.set(false);
   }
 
-  public saveMember(): void {
+  public async saveMember(): Promise<void> {
     if (this.memberForm.valid) {
       const formValue = this.memberForm.value;
       const newMember: Omit<Member, 'id'> = {
@@ -65,7 +65,7 @@ export class MemberAddComponent {
         gender: formValue.gender! as Gender,
         membershipStatus: 'Active',
       };
-      this.memberState.addMember(newMember);
+      await this.memberState.addMember(newMember);
       this.router.navigate(['/members']);
     }
   }

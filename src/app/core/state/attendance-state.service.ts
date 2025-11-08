@@ -1,8 +1,6 @@
-import { Injectable, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Injectable, inject, computed, Signal } from '@angular/core';
 import { Attendance } from '../models/models/attendance.model';
 import { AttendanceService } from './attendance.service';
-import { EMPTY, Subject, catchError, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,30 +8,19 @@ import { EMPTY, Subject, catchError, switchMap } from 'rxjs';
 export class AttendanceStateService {
   private attendanceService = inject(AttendanceService);
 
-  public attendances = signal<Attendance[]>([]);
+  public attendances = this.attendanceService.todayAttendance;
 
-  constructor() {
-    this.attendanceService
-      .getAttendances()
-      .pipe(
-        takeUntilDestroyed(),
-        catchError((err) => {
-          console.error('Error fetching attendances:', err);
-          return EMPTY;
-        })
-      )
-      .subscribe((data) => this.attendances.set(data));
+  async addAttendance(attendance: Partial<Attendance>): Promise<void> {
+    await this.attendanceService.addAttendance(attendance);
   }
 
-  addAttendance(attendance: Partial<Attendance>): void {
-    this.attendanceService.addAttendance(attendance).subscribe();
+  async updateAttendance(id: string, data: Partial<Attendance>): Promise<void> {
+    await this.attendanceService.updateAttendance(id, data);
   }
 
-  updateAttendance(id: string, data: Partial<Attendance>): void {
-    this.attendanceService.updateAttendance(id, data).subscribe();
-  }
-
-  getAttendanceByMemberId(memberId: string): Attendance[] {
-    return this.attendances().filter(a => a.memberId === memberId);
+  getAttendanceByMemberId(memberId: string): Signal<Attendance[]> {
+    return computed(() =>
+      this.attendances().filter((a) => a.memberId === memberId)
+    );
   }
 }

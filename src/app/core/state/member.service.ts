@@ -1,17 +1,16 @@
-import { inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import {
   Firestore,
   collection,
   collectionData,
   doc,
-  docData,
   addDoc,
   updateDoc,
   deleteDoc,
   DocumentReference,
 } from '@angular/fire/firestore';
 import { Member } from '../models/models/member.model';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -20,15 +19,20 @@ export class MemberService {
   private firestore: Firestore = inject(Firestore);
   private membersCollection = collection(this.firestore, 'members');
 
-  getMembers(): Observable<Member[]> {
-    return (collectionData(this.membersCollection, { idField: 'id' }) as Observable<Member[]>).pipe(
-      tap((v) => console.log('member: ', v))
-    );
+  private membersSignal = signal<Member[]>([]);
+  public members = this.membersSignal.asReadonly();
+
+  constructor() {
+    const members$ = collectionData(this.membersCollection, {
+      idField: 'id',
+    }) as Observable<Member[]>;
+    members$.subscribe((members) => {
+      this.membersSignal.set(members);
+    });
   }
 
-  getMember(id: string): Observable<Member> {
-    const memberDocRef = doc(this.firestore, `members/${id}`);
-    return docData(memberDocRef, { idField: 'id' }) as Observable<Member>;
+  getMember(id: string) {
+    return computed(() => this.members().find((m) => m.id === id));
   }
 
   addMember(member: Omit<Member, 'id'>): Promise<DocumentReference> {

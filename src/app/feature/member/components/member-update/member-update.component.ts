@@ -72,7 +72,7 @@ export class MemberUpdateComponent {
     this.isDropdownVisible.set(false);
   }
 
-  public updateMember(): void {
+  public async updateMember(): Promise<void> {
     if (this.memberForm.valid) {
       const originalMember = this.member();
       if (!originalMember) return;
@@ -88,7 +88,15 @@ export class MemberUpdateComponent {
         gender: formValue.gender! as Gender,
       };
 
-      this.memberState.updateMember(updatedMember);
+      await this.memberState.updateMember(updatedMember);
+      this.router.navigate(['/members']);
+    }
+  }
+
+  async deleteMember(): Promise<void> {
+    const memberId = this.id();
+    if (memberId) {
+      await this.memberState.deleteMember(memberId);
       this.router.navigate(['/members']);
     }
   }

@@ -1,108 +1,131 @@
 :host {
   display: block;
-  padding: 2rem;
+  padding: var(--spacing-xl);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+  gap: var(--spacing-lg);
+  grid-template-areas:
+    "quick-actions quick-actions recent-check-ins recent-check-ins"
+    "total-members active-members checked-in available-lockers"
+    "weekly-chart weekly-chart weekly-chart weekly-chart";
 }
 
 .quick-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  margin-bottom: 2.5rem;
-  animation: fadeIn 0.4s ease-out;
-
-  button {
-    flex: 1 1 200px; /* Allow buttons to grow and shrink */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    padding: 1rem;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    letter-spacing: 1px;
-    color: var(--secondary-background);
-    background-color: var(--primary-accent);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-
-    .icon {
-      font-size: 1.5rem;
-      font-family: 'Roboto', sans-serif;
-    }
-
-    &:hover {
-      background-color: var(--primary-accent-hover);
-      transform: translateY(-4px);
-      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-    }
-  }
-}
-
-.dashboard-container {
+  grid-area: quick-actions;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  animation: fadeIn 0.5s ease-out 0.2s;
-  animation-fill-mode: both; /* Keep state after animation */
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
 }
 
-.stat-card {
-  background-color: var(--secondary-background);
-  padding: 1.5rem 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px var(--box-shadow);
-  border-left: 5px solid var(--primary-accent);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  h3 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    color: var(--primary-accent);
-    margin: 0 0 0.5rem 0;
-  }
-
-  p {
-    font-size: 2.8rem;
-    font-weight: 700;
-    color: var(--primary-text);
-    margin: 0;
-  }
+.quick-action-card {
+  background-color: var(--surface-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--text-color-primary);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
 
   &:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+  }
+
+  .icon {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  span {
+    font-weight: var(--font-weight-bold);
   }
 }
 
-.chart-section {
-  background-color: var(--secondary-background);
-  padding: 2rem;
-  margin-top: 2.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px var(--box-shadow);
-  animation: fadeIn 0.5s ease-out 0.4s;
-  animation-fill-mode: both; /* Keep state after animation */
+.stat-card-total-members { grid-area: total-members; }
+.stat-card-active-members { grid-area: active-members; }
+.stat-card-checked-in { grid-area: checked-in; }
+.stat-card-available-lockers { grid-area: available-lockers; }
+
+.recent-check-ins-card {
+  grid-area: recent-check-ins;
+  background-color: var(--surface-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.weekly-chart-card {
+  grid-area: weekly-chart;
+  background-color: var(--surface-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.card-header {
+  margin-bottom: var(--spacing-md);
 
   h3 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.75rem;
-    color: var(--primary-accent);
-    margin: 0 0 1.5rem 0;
-    text-align: center;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
   }
 }
 
-/* General Animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-15px);
+.check-in-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.check-in-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid var(--border-color);
+
+  &:last-child {
+    border-bottom: none;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+}
+
+.member-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.member-name {
+  font-weight: var(--font-weight-bold);
+}
+
+.check-in-time {
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+}
+
+.locker-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.locker-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+}
+
+.locker-number {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+  color: var(--primary-color);
 }

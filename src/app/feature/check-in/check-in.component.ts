@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, signal, computed } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+  computed,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MemberStateService } from '../../core/state/member-state.service';
 import { AttendanceStateService } from '../../core/state/attendance-state.service';
@@ -12,7 +18,7 @@ import { Attendance } from '../../core/models/models/attendance.model';
   templateUrl: './check-in.component.html',
   styleUrls: ['./check-in.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule],
 })
 export class CheckInComponent {
   public memberStateService = inject(MemberStateService);
@@ -24,8 +30,8 @@ export class CheckInComponent {
   public assignLocker = signal(false);
   public selectedLocker = signal<number | null>(null);
 
-  private members = computed(() => this.memberStateService.members());
-  private attendances = computed(() => this.attendanceStateService.attendances());
+  private members = this.memberStateService.members;
+  public attendances = this.attendanceStateService.attendances;
 
   public filteredMembers = computed(() => {
     const term = this.searchTerm();
@@ -33,17 +39,21 @@ export class CheckInComponent {
       return [];
     }
     const lowercasedTerm = term.toLowerCase();
-    return this.members().filter((m: Member) => m.name.toLowerCase().includes(lowercasedTerm) && !this.isMemberCheckedIn(m.id));
+    return this.members().filter(
+      (m: Member) =>
+        m.name.toLowerCase().includes(lowercasedTerm) &&
+        !this.isMemberCheckedIn(m.id)
+    );
   });
 
   public checkedInMembers = computed(() => {
-    const checkedInAttendances = this.attendances().filter(a => !a.checkOutTime);
-    return checkedInAttendances.map(attendance => {
-      const member = this.members().find(m => m.id === attendance.memberId);
+    const checkedInAttendances = this.attendances().filter((a) => !a.checkOutTime);
+    return checkedInAttendances.map((attendance) => {
+      const member = this.members().find((m) => m.id === attendance.memberId);
       return {
         ...attendance,
         memberName: member ? member.name : 'Unknown',
-        memberId: member ? member.id : ''
+        memberId: member ? member.id : '',
       };
     });
   });
@@ -58,8 +68,8 @@ export class CheckInComponent {
 
   public memberAttendanceHistory = computed(() => {
     const member = this.selectedMember();
-    if(member) {
-        return this.attendanceStateService.getAttendanceByMemberId(member.id);
+    if (member) {
+      return this.attendanceStateService.getAttendanceByMemberId(member.id)();
     }
     return [];
   });
@@ -78,30 +88,36 @@ export class CheckInComponent {
   }
 
   isMemberCheckedIn(memberId: string): boolean {
-    return this.attendances().some((a: Attendance) => a.memberId === memberId && !a.checkOutTime);
+    return this.attendances().some(
+      (a: Attendance) => a.memberId === memberId && !a.checkOutTime
+    );
   }
 
-  checkIn(): void {
+  async checkIn(): Promise<void> {
     const member = this.selectedMember();
     if (member) {
-      this.attendanceStateService.addAttendance({
+      await this.attendanceStateService.addAttendance({
         memberId: member.id,
         checkInTime: new Date(),
         lockerNumber: this.selectedLocker() ?? undefined,
       });
 
-      if(this.selectedLocker()) {
-        this.lockerStateService.takeLocker(this.selectedLocker()!)
+      if (this.selectedLocker()) {
+        this.lockerStateService.takeLocker(this.selectedLocker()!);
       }
 
       this.resetSelection();
     }
   }
 
-  checkOut(memberId: string): void {
-    const attendance = this.attendances().find((a: Attendance) => a.memberId === memberId && !a.checkOutTime);
+  async checkOut(memberId: string): Promise<void> {
+    const attendance = this.attendances().find(
+      (a: Attendance) => a.memberId === memberId && !a.checkOutTime
+    );
     if (attendance) {
-      this.attendanceStateService.updateAttendance(attendance.id, { checkOutTime: new Date() });
+      await this.attendanceStateService.updateAttendance(attendance.id, {
+        checkOutTime: new Date(),
+      });
 
       if (attendance.lockerNumber) {
         this.lockerStateService.releaseLocker(attendance.lockerNumber);

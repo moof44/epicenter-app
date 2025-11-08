@@ -7,7 +7,7 @@ import { MemberStateService } from '../../core/state/member-state.service';
   selector: 'app-attendance-dashboard',
   templateUrl: './attendance-dashboard.component.html',
   styleUrls: ['./attendance-dashboard.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule]
 })
 export class AttendanceDashboardComponent {

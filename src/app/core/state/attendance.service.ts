@@ -1,5 +1,4 @@
-
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {
   Firestore,
   collection,
@@ -8,9 +7,11 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
-  docData,
+  where,
+  query,
+  Timestamp,
 } from '@angular/fire/firestore';
-import { from, Observable } from 'rxjs';
+import { from, Observable, map } from 'rxjs';
 import { Attendance } from '../models/models/attendance.model';
 
 @Injectable({
@@ -20,15 +21,44 @@ export class AttendanceService {
   private firestore = inject(Firestore);
   private attendanceCollection = collection(this.firestore, 'attendance');
 
-  getAttendances(): Observable<Attendance[]> {
-    return collectionData(this.attendanceCollection, {
+  private_todayAttendanceSignal = signal<Attendance[]>([]);
+  public todayAttendance = this.private_todayAttendanceSignal.asReadonly();
+
+  constructor() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayTimestamp = Timestamp.fromDate(today);
+
+    const q = query(
+      this.attendanceCollection,
+      where('checkInTime', '>=', todayTimestamp)
+    );
+
+    const todayAttendance$ = (collectionData(q, {
       idField: 'id',
-    }) as Observable<Attendance[]>;
+    }) as Observable<Attendance[]>).pipe(
+      map(attendances => attendances.map(a => ({
+        ...a,
+        checkInTime: (a.checkInTime as any).toDate(),
+        ...(a.checkOutTime && { checkOutTime: (a.checkOutTime as any).toDate() })
+      })))
+    );
+
+    todayAttendance$.subscribe((attendances) => {
+      this.private_todayAttendanceSignal.set(attendances);
+    });
   }
 
-  getAttendance(id: string): Observable<Attendance> {
-    const attendanceDoc = doc(this.firestore, `attendance/${id}`);
-    return docData(attendanceDoc, { idField: 'id' }) as Observable<Attendance>;
+  getAttendances(): Observable<Attendance[]> {
+    return (collectionData(this.attendanceCollection, {
+      idField: 'id',
+    }) as Observable<Attendance[]>).pipe(
+      map(attendances => attendances.map(a => ({
+        ...a,
+        checkInTime: (a.checkInTime as any).toDate(),
+        ...(a.checkOutTime && { checkOutTime: (a.checkOutTime as any).toDate() })
+      })))
+    );
   }
 
   addAttendance(attendance: Partial<Attendance>): Observable<string> {
