@@ -32,6 +32,7 @@
     "@angular/material": "^20.2.12",
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
+    "@angular/service-worker": "^20.3.0",
     "@firebase/firestore": "^4.9.2",
     "chart.js": "^4.5.1",
     "date-fns": "^4.1.0",

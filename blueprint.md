@@ -53,3 +53,7 @@ Epicenter is a modern, reactive gym management application built with the latest
     - Installed `@angular/material` and configured it in the application's `app.config.ts`.
     - Replaced the custom `MessageStateService` with the `MatSnackBar` service in `MemberStateService` and `CheckInComponent`.
     - Removed the custom `MessageComponent` and its associated service to streamline the codebase and rely on a robust, third-party library for notifications.
+- **Progressive Web App (PWA)**: Enabled PWA support to allow the application to be installed on devices and work offline.
+    - Added `@angular/pwa` to the project.
+    - Configured the web app manifest (`manifest.webmanifest`) and service worker (`ngsw-config.json`).
+    - Added a `theme-color` meta tag to `index.html`.
